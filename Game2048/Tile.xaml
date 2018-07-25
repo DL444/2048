@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="Game2048.Tile"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Game2048"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+    <UserControl.RenderTransform>
+        <TranslateTransform />
+    </UserControl.RenderTransform>
+
+    <Grid x:Name="BackGrid" Margin="5" Background="DarkGreen">
+        <Viewbox>
+            <Label Name="NumberBox" Content="0" FontWeight="Light"/>
+        </Viewbox>
+    </Grid>
+</UserControl>

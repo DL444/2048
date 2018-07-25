@@ -1,0 +1,137 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" GroupingSetting="Access" MembersFormat="FullSignature">
+  <Class Name="Lib2048.Board">
+    <Position X="0.75" Y="0.5" Width="5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="Lib2048.Board.MoveDirection">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Class Name="Lib2048.Board.GameFailedEventArgs">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Lib2048.Board.TilesMovedEventArgs">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Lib2048.Board.TileAddedEventArgs">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Lib2048.Board.ScoreChangedEventArgs">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Lib2048.Board.MoveResult">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Class Name="Lib2048.Board.MoveResult.Move">
+            <TypeIdentifier>
+              <NewMemberFileName>Board.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Class>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+        <Lollipop Position="0.2" />
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>CAAAACAAAIABpAgACAAIAQNgAwEAAAAAIAAAAAAAElE=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Lib2048.TimedBoard">
+    <Position X="6.25" Y="3.5" Width="4.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Lib2048.TimedBoard.TimerElapsedEventArgs">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQgAAAgAAAAQAAAAIAAAACgAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib2048.TimedAddTileBoard">
+    <Position X="6.25" Y="10.25" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAgAgAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib2048.TimedDeathBoard">
+    <Position X="11.25" Y="4.25" Width="4.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="Lib2048.TimedDeathBoard.TimedGameFailedEventArgs">
+        <Compartments>
+          <Compartment Name="Nested Types" Collapsed="false" />
+        </Compartments>
+        <NestedTypes>
+          <Enum Name="Lib2048.TimedDeathBoard.TimedGameFailedEventArgs.FailedReason">
+            <TypeIdentifier>
+              <NewMemberFileName>Board.cs</NewMemberFileName>
+            </TypeIdentifier>
+          </Enum>
+        </NestedTypes>
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <InheritanceLine Type="Lib2048.TimedBoard" FixedFromPoint="true">
+      <Path>
+        <Point X="10.75" Y="5.677" />
+        <Point X="11.25" Y="5.677" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAAAAgAgAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib2048.ObstacledBoard">
+    <Position X="6.25" Y="0.5" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAgAgAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Lib2048.TimedReduceScoreBoard">
+    <Position X="11.25" Y="0.5" Width="4.75" />
+    <InheritanceLine Type="Lib2048.TimedBoard" FixedFromPoint="true">
+      <Path>
+        <Point X="10.75" Y="4.546" />
+        <Point X="10.99" Y="4.546" />
+        <Point X="10.99" Y="2.111" />
+        <Point X="11.25" Y="2.111" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAgAgAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Board.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

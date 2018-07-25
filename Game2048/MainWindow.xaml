@@ -1,0 +1,123 @@
+﻿<Window x:Class="Game2048.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game2048"
+        mc:Ignorable="d"
+        Title="2048" Height="450" Width="650" Background="LightGray" Icon="2048Icon-01.png" Closing="Window_Closing">
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+
+        
+        <Grid.Triggers>
+            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                <EventTrigger.Actions>
+                    <BeginStoryboard>
+                        <BeginStoryboard.Storyboard>
+                            <Storyboard TargetName="Rect" TargetProperty="(Button.RenderTransform).(TranslateTransform.X)">
+                                <DoubleAnimation By="300" Duration="0:0:5" />
+                            </Storyboard>
+
+                        </BeginStoryboard.Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger.Actions>
+            </EventTrigger>
+        </Grid.Triggers>
+
+        <Rectangle x:Name="Rect" Fill="#FF0505C0" HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Grid.Column="0">
+            <Rectangle.RenderTransform>
+                <TranslateTransform />
+            </Rectangle.RenderTransform>        
+        </Rectangle>
+
+    </Grid>-->
+    <Grid x:Name="ParentGrid" KeyDown="MainGrid_KeyDown" KeyUp="MainGrid_KeyUp" Focusable="True">
+        <!--<Viewbox>
+            <Grid Height="1000" Width="1000">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.Triggers>
+                    <EventTrigger SourceName="Rect" RoutedEvent="MouseUp">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <BeginStoryboard.Storyboard>
+                                    <Storyboard TargetName="Rect" TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)">
+                                        <DoubleAnimation By="250" Duration="0:0:0.15" AccelerationRatio="1.0" AutoReverse="True"/>
+                                    </Storyboard>
+                                </BeginStoryboard.Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+                <Rectangle x:Name="Rect" Fill="#FF0505C0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
+                    <Rectangle.RenderTransform>
+                        <TranslateTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+
+
+            </Grid>
+        </Viewbox>-->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="MainGrid" Grid.Column="0" Grid.Row="0"/>
+        <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120">
+            <Label Content="New Game" HorizontalAlignment="Center"/>
+            <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
+            <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
+            <Button x:Name="NewGame6" Tag="6" Content="6 * 6" Margin="10" Click="NewGameBtns_Click"/>
+            <Label Content="Mode" HorizontalAlignment="Center"/>
+            <ComboBox x:Name="ModeBox" SelectedIndex="0">
+                <ComboBoxItem>Normal</ComboBoxItem>
+                <ComboBoxItem>Timed (Add Tile)</ComboBoxItem>
+                <ComboBoxItem>Timed (Reduce Score)</ComboBoxItem>
+                <ComboBoxItem>Timed (10 min Quest)</ComboBoxItem>
+                <ComboBoxItem>Obstacles</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        <Grid x:Name="ControlPanel" Height="300" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button x:Name="UpBtn" Content="↑" Click="UpBtn_Click" Grid.Row="0" Grid.Column="1" Margin="5"/>
+            <Button x:Name="DownBtn" Content="↓" Click="DownBtn_Click" Grid.Row="2" Grid.Column="1" Margin="5"/>
+            <Button x:Name="LeftBtn" Content="←" Click="LeftBtn_Click" Grid.Row="1" Grid.Column="0" Margin="5"/>
+            <Button x:Name="RightBtn" Content="→" Click="RightBtn_Click" Grid.Row="1" Grid.Column="2" Margin="5"/>
+            <Button x:Name="Undo" Content="Undo" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Click="Undo_Click"/>
+            <Button x:Name="NewGameMenu" Content="New" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="1" Margin="5" Click="NewGame_Click"/>
+            <Label x:Name="ScoreLabel" Content="Score: 0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Label x:Name="TimeLabel" Content="Time: 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+        </Grid>
+        <StackPanel Grid.Column="1" Visibility="Collapsed">
+        </StackPanel>
+
+
+    </Grid>
+</Window>
