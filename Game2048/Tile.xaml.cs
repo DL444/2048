@@ -20,22 +20,8 @@ namespace Game2048
     /// </summary>
     public partial class Tile : UserControl
     {
-        static Color[] backgrounds = new Color[]
-        {
-            Colors.Transparent, // 0
-            Colors.Indigo, // 2
-            Colors.DarkBlue, // 4
-            Colors.RoyalBlue, // 8
-            Colors.DeepSkyBlue, // 16
-            Colors.Teal, // 32
-            Colors.Green, // 64
-            Colors.LimeGreen, // 128
-            Colors.Gold, // 256
-            Colors.Orange, // 512
-            Colors.Tomato, // 1024
-            Colors.Red, // 2048
-            Colors.DarkRed // 4096
-        };
+        static DefaultBrushSet defaultBrushSet = new DefaultBrushSet();
+        IBrushSet brushSet;
 
         private int number;
         public int Number
@@ -46,27 +32,28 @@ namespace Game2048
                 if (value == -1)
                 {
                     NumberBox.Content = "X";
-                    NumberBox.Foreground = new SolidColorBrush(Colors.Black);
-                    BackGrid.Background = new SolidColorBrush(Colors.DarkGray);
+                    NumberBox.Foreground = brushSet.GetForegroundBrush(value);
+                    BackGrid.Background = brushSet.GetBackgroundBrush(value);
                 }
                 else
                 {
-                    int level = (int)Math.Log(value, 2);
-                    level = level > 12 ? 12 : level;
                     number = value;
-                    BackGrid.Background = new SolidColorBrush(backgrounds[level]);
                     NumberBox.Content = value;
-                    NumberBox.Foreground = level == 0 ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
+                    int level = (int)Math.Log(value, 2);
+                    BackGrid.Background = brushSet.GetBackgroundBrush(level);
+                    //NumberBox.Foreground = level == 0 ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
+                    NumberBox.Foreground = brushSet.GetForegroundBrush(level);
                 }
             }
         }
 
 
-        public Tile(int number)
+        public Tile(int number) : this(number, defaultBrushSet) { }
+        public Tile(int number, IBrushSet brushSet)
         {
             InitializeComponent();
+            this.brushSet = brushSet;
             Number = number;
         }
-
     }
 }
