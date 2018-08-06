@@ -7,13 +7,14 @@ using System.Windows.Media;
 
 namespace Game2048
 {
-    public interface IBrushSet
+    public interface ITileTheme
     {
+        FontFamily Font { get; }
         Brush GetForegroundBrush(int level);
         Brush GetBackgroundBrush(int level);
     }
 
-    class DefaultBrushSet : IBrushSet
+    class DefaultTheme : ITileTheme
     {
         static SolidColorBrush[] backgrounds = new SolidColorBrush[]
         {
@@ -31,21 +32,40 @@ namespace Game2048
             Brushes.Red, // 2048
             Brushes.DarkRed // 4096
         };
-        static readonly SolidColorBrush blackBrush = Brushes.Black;
-        static readonly SolidColorBrush whiteBrush = Brushes.White;
-        static readonly SolidColorBrush grayBrush = Brushes.DarkGray;
+        static FontFamily font;
+        public FontFamily Font => font;
+
+        static DefaultTheme()
+        {
+            foreach(FontFamily f in Fonts.SystemFontFamilies)
+            {
+                if(f.Source == "Segoe UI")
+                {
+                    font = f;
+                    return;
+                }
+                font = new FontFamily("Segoe UI");
+            }
+        }
 
         public Brush GetBackgroundBrush(int level)
         {
-            if (level < 0) { return grayBrush; }
+            if (level < 0) { return Brushes.DarkGray; }
             level = level > 12 ? 12 : level;
             return backgrounds[level];
         }
 
-        public Brush GetForegroundBrush(int level)
+        public virtual Brush GetForegroundBrush(int level)
         {
-            if (level < 0) { return blackBrush; }
-            return whiteBrush;
+            if (level < 0) { return Brushes.Black; }
+            return Brushes.White;
+        }
+    }
+    class DefaultNoLabelTheme : DefaultTheme
+    {
+        public override Brush GetForegroundBrush(int level)
+        {
+            return Brushes.Transparent;
         }
     }
 }

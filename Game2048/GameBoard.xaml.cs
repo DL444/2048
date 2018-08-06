@@ -26,6 +26,7 @@ namespace Game2048
         int size;
         Board refBoard;
         Tile[,] tiles;
+        ITileTheme brushSet = new DefaultTheme();
 
         public GameBoard(Board refBoard)
         {
@@ -52,7 +53,7 @@ namespace Game2048
                     {
                         int i = e.Location.row;
                         int j = e.Location.column;
-                        tiles[i, j] = new Tile(e.Value);
+                        tiles[i, j] = new Tile(e.Value, brushSet);
                         Grid.SetRow(tiles[i, j], i);
                         Grid.SetColumn(tiles[i, j], j);
                         BoardGrid.Children.Add(tiles[i, j]);
@@ -74,7 +75,7 @@ namespace Game2048
                 {
                     if(refBoard[i,j] != 0)
                     {
-                        tiles[i, j] = new Tile(refBoard[i, j]);
+                        tiles[i, j] = new Tile(refBoard[i, j], brushSet);
                         Grid.SetRow(tiles[i, j], i);
                         Grid.SetColumn(tiles[i, j], j);
                         BoardGrid.Children.Add(tiles[i, j]);

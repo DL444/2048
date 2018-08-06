@@ -20,8 +20,8 @@ namespace Game2048
     /// </summary>
     public partial class Tile : UserControl
     {
-        static DefaultBrushSet defaultBrushSet = new DefaultBrushSet();
-        IBrushSet brushSet;
+        static DefaultTheme defaultBrushSet = new DefaultTheme();
+        ITileTheme theme;
 
         private int number;
         public int Number
@@ -32,27 +32,28 @@ namespace Game2048
                 if (value == -1)
                 {
                     NumberBox.Content = "X";
-                    NumberBox.Foreground = brushSet.GetForegroundBrush(value);
-                    BackGrid.Background = brushSet.GetBackgroundBrush(value);
+                    NumberBox.Foreground = theme.GetForegroundBrush(value);
+                    BackGrid.Background = theme.GetBackgroundBrush(value);
                 }
                 else
                 {
                     number = value;
                     NumberBox.Content = value;
                     int level = (int)Math.Log(value, 2);
-                    BackGrid.Background = brushSet.GetBackgroundBrush(level);
+                    BackGrid.Background = theme.GetBackgroundBrush(level);
                     //NumberBox.Foreground = level == 0 ? new SolidColorBrush(Colors.Black) : new SolidColorBrush(Colors.White);
-                    NumberBox.Foreground = brushSet.GetForegroundBrush(level);
+                    NumberBox.Foreground = theme.GetForegroundBrush(level);
                 }
+                NumberBox.FontFamily = theme.Font;
             }
         }
 
 
         public Tile(int number) : this(number, defaultBrushSet) { }
-        public Tile(int number, IBrushSet brushSet)
+        public Tile(int number, ITileTheme brushSet)
         {
             InitializeComponent();
-            this.brushSet = brushSet;
+            this.theme = brushSet;
             Number = number;
         }
     }
