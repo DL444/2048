@@ -111,6 +111,10 @@ namespace Game2048
             {
                 brd = new ObstacledBoard(size);
             }
+            else if(mode == GameMode.Tools)
+            {
+                brd = new ItemBoard(size);
+            }
             else
             {
                 brd = new Board(size);
@@ -212,6 +216,14 @@ namespace Game2048
             NewGame((GameMode)ModeBox.SelectedIndex, int.Parse((sender as Button).Tag as string));
             EntryPanel.Visibility = Visibility.Collapsed;
             ControlPanel.Visibility = Visibility.Visible;
+            if(ModeBox.SelectedIndex == 5)
+            {
+                ToolBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                ToolBox.Visibility = Visibility.Collapsed;
+            }
             ScoreLabel.Content = $"Score: {brd.Score}";
             ScoreLabel.Foreground = new SolidColorBrush(Colors.Black);
             EnableControl(true);
@@ -293,7 +305,7 @@ namespace Game2048
 
         enum GameMode
         {
-            Normal = 0, TimedAddTile = 1, TimedReduceScore = 2, Timed10min = 3, Obstacle = 4
+            Normal = 0, TimedAddTile = 1, TimedReduceScore = 2, Timed10min = 3, Obstacle = 4, Tools = 5
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

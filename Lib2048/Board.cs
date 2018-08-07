@@ -336,7 +336,7 @@ namespace Lib2048
         /// Undo the previous move.
         /// </summary>
         /// <remarks>If any tile moved, the method will also fire the <see cref="TilesMoved"/> event.</remarks>
-        public void Undo()
+        public virtual void Undo()
         {
             if (history.Count == 0) { return; }
             board = history[history.Count - 1].board;
@@ -517,6 +517,32 @@ namespace Lib2048
         {
             GameFailed?.Invoke(this, e);
         }
+
+        protected bool RemoveTile(int row, int column)
+        {
+            int value = board[row, column];
+            if (value == 0) { return false; }
+            else
+            {
+                AddHistoryRecord();
+                board[row, column] = 0;
+                TileRemoved?.Invoke(this, new TileRemovedEventArgs(value, row, column));
+                return true;
+            }
+        }
+
+        protected bool PromoteTile(int row, int column)
+        {
+            int value = board[row, column];
+            if(value > 0)
+            {
+                AddHistoryRecord();
+                board[row, column] *= 2;
+                TilePromoted?.Invoke(this, new TilePromotedEventArgs(value, row, column));
+                return true;
+            }
+            return false;
+        }
         /// <summary>
         /// Get the row and column of a tile specified by its number.
         /// </summary>
@@ -668,6 +694,37 @@ namespace Lib2048
             /// <param name="column">The column of the new tile.</param>
             /// <param name="value">The value of the new tile.</param>
             public TileAddedEventArgs(int row, int column, int value) : this(row, column, value, false) { }
+        }
+
+        protected event EventHandler<TileRemovedEventArgs> TileRemoved;
+        public class TileRemovedEventArgs
+        {
+            public TileRemovedEventArgs(int value, (int row, int column) location)
+            {
+                Location = location;
+                Value = value;
+            }
+            public TileRemovedEventArgs(int value, int row, int column) : this(value, (row, column)) { }
+
+            public (int row, int column) Location { get; }
+            public int Value { get; }
+        }
+
+        protected event EventHandler<TilePromotedEventArgs> TilePromoted;
+        public class TilePromotedEventArgs
+        {
+            public TilePromotedEventArgs((int row, int column) location, int oldValue, int newValue)
+            {
+                Location = location;
+                OldValue = oldValue;
+                NewValue = newValue;
+            }
+            public TilePromotedEventArgs(int oldValue, int newValue, int row, int column) : this((row, column), oldValue, newValue) { }
+            public TilePromotedEventArgs(int oldValue, int row, int column) : this(oldValue, oldValue * 2, row, column) { }
+
+            public (int row, int column) Location { get; }
+            public int OldValue { get; private set; }
+            public int NewValue { get; private set; }
         }
 
         /// <summary>
@@ -1223,6 +1280,7 @@ namespace Lib2048
             }
         }
     }
+
     /// <summary>
     /// A 2048 board with immitigatable obstacles.
     /// </summary>
@@ -1293,6 +1351,34 @@ namespace Lib2048
         public ObstacledBoard(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             ObstacleCount = (int)info.GetValue("obstacleCount", typeof(int));
+        }
+    }
+
+    public sealed class ItemBoard : Board
+    {
+        public ItemBoard(int size) : base(size) { }
+        public ItemBoard() : this(4) { }
+
+        public ItemBoard(ItemBoard board) : base(board) { }
+
+        public override Board Copy()
+        {
+            return new ItemBoard(this);
+        }
+
+        public override void Undo() { }
+        public new bool RemoveTile(int row, int column) { return base.RemoveTile(row, column); }
+        public new bool PromoteTile(int row, int column) { return base.PromoteTile(row, column); }
+
+        public new event EventHandler<TilePromotedEventArgs> TilePromoted
+        {
+            add => base.TilePromoted += value;
+            remove => base.TilePromoted -= value;
+        }
+        public new event EventHandler<TileRemovedEventArgs> TileRemoved
+        {
+            add => base.TileRemoved += value;
+            remove => base.TileRemoved -= value;
         }
     }
 }

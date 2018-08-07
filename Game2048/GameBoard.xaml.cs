@@ -142,5 +142,9 @@ namespace Game2048
             }
         }
 
+        void AddTile()
+        {
+
+        }
     }
 }

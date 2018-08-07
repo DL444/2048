@@ -78,7 +78,7 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="MainGrid" Grid.Column="0" Grid.Row="0"/>
-        <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120">
+        <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Visibility="Hidden">
             <Label Content="New Game" HorizontalAlignment="Center"/>
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
@@ -90,30 +90,42 @@
                 <ComboBoxItem>Timed (Reduce Score)</ComboBoxItem>
                 <ComboBoxItem>Timed (10 min Quest)</ComboBoxItem>
                 <ComboBoxItem>Obstacles</ComboBoxItem>
+                <ComboBoxItem>Tools</ComboBoxItem>
             </ComboBox>
         </StackPanel>
-        <Grid x:Name="ControlPanel" Height="300" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Visibility="Collapsed">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
+        <Grid x:Name="ControlPanel" Height="300" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Button x:Name="UpBtn" Content="↑" Click="UpBtn_Click" Grid.Row="0" Grid.Column="1" Margin="5"/>
-            <Button x:Name="DownBtn" Content="↓" Click="DownBtn_Click" Grid.Row="2" Grid.Column="1" Margin="5"/>
-            <Button x:Name="LeftBtn" Content="←" Click="LeftBtn_Click" Grid.Row="1" Grid.Column="0" Margin="5"/>
-            <Button x:Name="RightBtn" Content="→" Click="RightBtn_Click" Grid.Row="1" Grid.Column="2" Margin="5"/>
-            <Button x:Name="Undo" Content="Undo" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Click="Undo_Click"/>
-            <Button x:Name="NewGameMenu" Content="New" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="1" Margin="5" Click="NewGame_Click"/>
-            <Label x:Name="ScoreLabel" Content="Score: 0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Label x:Name="TimeLabel" Content="Time: 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button x:Name="UpBtn" Content="↑" Click="UpBtn_Click" Grid.Row="0" Grid.Column="1" Margin="5"/>
+                <Button x:Name="DownBtn" Content="↓" Click="DownBtn_Click" Grid.Row="2" Grid.Column="1" Margin="5"/>
+                <Button x:Name="LeftBtn" Content="←" Click="LeftBtn_Click" Grid.Row="1" Grid.Column="0" Margin="5"/>
+                <Button x:Name="RightBtn" Content="→" Click="RightBtn_Click" Grid.Row="1" Grid.Column="2" Margin="5"/>
+                <Button x:Name="Undo" Content="Undo" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" Click="Undo_Click"/>
+                <Button x:Name="NewGameMenu" Content="New" Grid.Row="5" Grid.Column="2" Grid.ColumnSpan="1" Margin="5" Click="NewGame_Click"/>
+                <Label x:Name="ScoreLabel" Content="Score: 0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Label x:Name="TimeLabel" Content="Time: 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
+            </Grid>
+            <StackPanel x:Name="ToolBox" Height="Auto" Grid.Row="1">
+                <Button x:Name="BombBtn" Content="Bomb" Margin="5"/>
+                <Button x:Name="WildcardBtn" Content="Wildcard" Margin="5"/>
+                <Button x:Name="PromoteBtn" Content="Promote" Margin="5"/>
+            </StackPanel>
         </Grid>
         <StackPanel Grid.Column="1" Visibility="Collapsed">
         </StackPanel>

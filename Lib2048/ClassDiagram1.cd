@@ -47,9 +47,19 @@
         </TypeIdentifier>
         <Lollipop Position="0.2" />
       </Class>
+      <Class Name="Lib2048.Board.TileRemovedEventArgs" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Lib2048.Board.TilePromotedEventArgs" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Board.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>CAAAACAAAIABpAgACAAIAQNgAwEAAAAAIAAAAAAAElE=</HashCode>
+      <HashCode>CAAAACAAAIA1pAgACAAIAQNgAwEAAAAAIAAAAAAAElE=</HashCode>
       <FileName>Board.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
