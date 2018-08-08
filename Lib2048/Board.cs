@@ -534,7 +534,7 @@ namespace Lib2048
         protected bool PromoteTile(int row, int column)
         {
             int value = board[row, column];
-            if(value > 0)
+            if(value > 0 && value < 1073741824)
             {
                 AddHistoryRecord();
                 board[row, column] *= 2;
@@ -1354,12 +1354,14 @@ namespace Lib2048
         }
     }
 
+    [Serializable]
     public sealed class ItemBoard : Board
     {
         public ItemBoard(int size) : base(size) { }
         public ItemBoard() : this(4) { }
 
         public ItemBoard(ItemBoard board) : base(board) { }
+        public ItemBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public override Board Copy()
         {
@@ -1369,6 +1371,7 @@ namespace Lib2048
         public override void Undo() { }
         public new bool RemoveTile(int row, int column) { return base.RemoveTile(row, column); }
         public new bool PromoteTile(int row, int column) { return base.PromoteTile(row, column); }
+        public new (int row, int column) AddTile(int value, int row, int column) { return base.AddTile(value, row, column); }
 
         public new event EventHandler<TilePromotedEventArgs> TilePromoted
         {
@@ -1380,5 +1383,11 @@ namespace Lib2048
             add => base.TileRemoved += value;
             remove => base.TileRemoved -= value;
         }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+        }
+
     }
 }

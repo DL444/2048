@@ -157,6 +157,10 @@ namespace Game2048
                 ScoreLabel.Content = $"Score: {brd.Score}";
                 ScoreLabel.Foreground = new SolidColorBrush(Colors.Black);
                 EnableControl(true);
+                if(board is ItemBoard)
+                {
+                    ToolBox.Visibility = Visibility.Visible;
+                }
             }
         }
 
@@ -330,6 +334,18 @@ namespace Game2048
                 formatter.Serialize(saveStream, state);
                 saveStream.Close();
             }
+        }
+
+        private void BombBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void WildcardBtn_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void PromoteBtn_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 

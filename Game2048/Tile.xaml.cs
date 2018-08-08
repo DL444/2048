@@ -56,5 +56,20 @@ namespace Game2048
             this.theme = brushSet;
             Number = number;
         }
+
+        public event EventHandler<TileTappedEventArgs> TileTapped;
+        public class TileTappedEventArgs
+        {
+            Tile TileTapped { get; }
+            public TileTappedEventArgs(Tile tileTapped)
+            {
+                TileTapped = tileTapped;
+            }
+        }
+
+        private void Tile_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TileTapped?.Invoke(this, new TileTappedEventArgs(this));
+        }
     }
 }

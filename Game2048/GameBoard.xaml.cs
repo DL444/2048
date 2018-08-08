@@ -28,6 +28,16 @@ namespace Game2048
         Tile[,] tiles;
         ITileTheme brushSet = new DefaultTheme();
 
+        public ITileTheme BrushSet
+        {
+            get => brushSet;
+            set
+            {
+                brushSet = value;
+                DisplayBoard();
+            }
+        }
+
         public GameBoard(Board refBoard)
         {
             InitializeComponent();
@@ -41,9 +51,39 @@ namespace Game2048
             }
             this.refBoard.TilesMoved += RefBoard_TilesMovedEvent;
             this.refBoard.TileAdded += RefBoard_TileAdded;
+            if(refBoard is ItemBoard b)
+            {
+                b.TilePromoted += ItemBoard_TilePromoted;
+                b.TileRemoved += ItemBoard_TileRemoved;
+            }
             tiles = new Tile[size, size];
             DisplayBoard();
         }
+
+        public (int row, int column) GetCoordinate(Tile tile)
+        {
+            for(int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if(ReferenceEquals(tiles[i,j], tile))
+                    {
+                        return (i, j);
+                    }
+                }
+            }
+            return (-1, -1);
+        }
+
+        private void ItemBoard_TilePromoted(object sender, Board.TilePromotedEventArgs e)
+        {
+            DisplayBoard();
+        }
+        private void ItemBoard_TileRemoved(object sender, Board.TileRemovedEventArgs e)
+        {
+            DisplayBoard();
+        }
+
 
         private void RefBoard_TileAdded(object sender, Board.TileAddedEventArgs e)
         {
@@ -53,7 +93,7 @@ namespace Game2048
                     {
                         int i = e.Location.row;
                         int j = e.Location.column;
-                        tiles[i, j] = new Tile(e.Value, brushSet);
+                        tiles[i, j] = new Tile(e.Value, BrushSet);
                         Grid.SetRow(tiles[i, j], i);
                         Grid.SetColumn(tiles[i, j], j);
                         BoardGrid.Children.Add(tiles[i, j]);
@@ -75,7 +115,7 @@ namespace Game2048
                 {
                     if(refBoard[i,j] != 0)
                     {
-                        tiles[i, j] = new Tile(refBoard[i, j], brushSet);
+                        tiles[i, j] = new Tile(refBoard[i, j], BrushSet);
                         Grid.SetRow(tiles[i, j], i);
                         Grid.SetColumn(tiles[i, j], j);
                         BoardGrid.Children.Add(tiles[i, j]);

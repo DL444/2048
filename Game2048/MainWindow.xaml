@@ -78,7 +78,7 @@
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
         <Grid x:Name="MainGrid" Grid.Column="0" Grid.Row="0"/>
-        <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Visibility="Hidden">
+        <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120">
             <Label Content="New Game" HorizontalAlignment="Center"/>
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
@@ -93,7 +93,7 @@
                 <ComboBoxItem>Tools</ComboBoxItem>
             </ComboBox>
         </StackPanel>
-        <Grid x:Name="ControlPanel" Height="300" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Visibility="Visible">
+        <Grid x:Name="ControlPanel" Height="300" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
@@ -121,10 +121,10 @@
                 <Label x:Name="ScoreLabel" Content="Score: 0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Label x:Name="TimeLabel" Content="Time: 0" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed"/>
             </Grid>
-            <StackPanel x:Name="ToolBox" Height="Auto" Grid.Row="1">
-                <Button x:Name="BombBtn" Content="Bomb" Margin="5"/>
-                <Button x:Name="WildcardBtn" Content="Wildcard" Margin="5"/>
-                <Button x:Name="PromoteBtn" Content="Promote" Margin="5"/>
+            <StackPanel x:Name="ToolBox" Height="Auto" Grid.Row="1" Visibility="Collapsed">
+                <Button x:Name="BombBtn" Content="Bomb" Margin="5" Click="BombBtn_Click"/>
+                <Button x:Name="WildcardBtn" Content="Wildcard" Margin="5" Click="WildcardBtn_Click"/>
+                <Button x:Name="PromoteBtn" Content="Promote" Margin="5" Click="PromoteBtn_Click"/>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Column="1" Visibility="Collapsed">
