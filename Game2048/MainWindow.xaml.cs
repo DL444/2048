@@ -338,14 +338,47 @@ namespace Game2048
 
         private void BombBtn_Click(object sender, RoutedEventArgs e)
         {
+            if(brd is ItemBoard b)
+            {
+                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Bomb, b);
+                ToolsWindow window = new ToolsWindow();
+                window.DataContext = vm;
+                window.ShowDialog();
+                if (window.DialogResult == true)
+                {
+                    b.RemoveTile(vm.Row - 1, vm.Column - 1);
+                }
+            }
         }
 
         private void WildcardBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (brd is ItemBoard b)
+            {
+                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Wildcard, b);
+                ToolsWindow window = new ToolsWindow();
+                window.DataContext = vm;
+                window.ShowDialog();
+                if (window.DialogResult == true)
+                {
+                    b.AddTile(vm.Value, vm.Row - 1, vm.Column - 1);
+                }
+            }
         }
 
         private void PromoteBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (brd is ItemBoard b)
+            {
+                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Promote, b);
+                ToolsWindow window = new ToolsWindow();
+                window.DataContext = vm;
+                window.ShowDialog();
+                if (window.DialogResult == true)
+                {
+                    b.PromoteTile(vm.Row - 1, vm.Column - 1);
+                }
+            }
         }
     }
 
