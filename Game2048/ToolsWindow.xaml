@@ -5,17 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Tools" Height="300" Width="300">
+        Title="Tools" Height="320" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Window.DataContext>
         <local:ToolsWindowViewModel/>
     </Window.DataContext>
     <Window.Resources>
         <local:ValueSelectorEnabledConverter x:Key="ValueSelectorEnabledConverter"/>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+        </Style>
     </Window.Resources>
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition />
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
@@ -32,7 +36,12 @@
             <TextBlock Text="Value" Margin="0,4"/>
             <ComboBox ItemsSource="{Binding ValueSource}" SelectedItem="{Binding Value, Mode=TwoWay}" Width="100" IsEnabled="{Binding Mode, Converter={StaticResource ValueSelectorEnabledConverter}}"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,4">
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.ColumnSpan="3" Margin="0,4">
+            <TextBlock Text="Cost: "/>
+            <TextBlock x:Name="CostBox" Text="{Binding Cost}"/>
+            <TextBlock Text=" Coins"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,4">
             <Button Content="OK" Width="72" Margin="0,0,4,0" Command="{Binding Ok}" Click="OkBtn_Click" />
             <Button Content="Cancel" Width="72" IsCancel="True"/>
         </StackPanel>

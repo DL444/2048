@@ -1,13 +1,11 @@
-﻿using System;
+﻿using Lib2048;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Input;
-using Lib2048;
 
 namespace Game2048
 {
@@ -18,6 +16,7 @@ namespace Game2048
         private int _value = 2;
         private int _size = 4;
         private ToolsMode _mode = ToolsMode.Bomb;
+        private int _cost = 0;
 
         private ItemBoard brd;
 
@@ -64,6 +63,14 @@ namespace Game2048
             {
                 _value = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Value"));
+                if(Mode == ToolsMode.Bomb)
+                {
+                    Cost = 256 * (value == 0 ? 0 : 1);
+                }
+                else
+                {
+                    Cost = value > 128 ? value : 128;
+                }
             }
         }
         public int Size
@@ -73,6 +80,15 @@ namespace Game2048
             {
                 _size = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Size"));
+            }
+        }
+        public int Cost
+        {
+            get => _cost;
+            private set
+            {
+                _cost = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Cost"));
             }
         }
         public ToolsMode Mode

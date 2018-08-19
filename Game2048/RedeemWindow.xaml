@@ -1,0 +1,31 @@
+﻿<Window x:Class="Game2048.RedeemWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game2048"
+        mc:Ignorable="d"
+        Title="Redeem Coins" Height="350" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        <Window.Resources>
+            <ResourceDictionary>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="White"/>
+                </Style>
+            </ResourceDictionary>
+        </Window.Resources>
+        <Grid Background="Orange">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Background="White">
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="24" Color="#FF555555"/>
+                </Grid.Effect>
+                <StackPanel Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Redeem" FontSize="24" Margin="0,0,0,8"/>
+                    <TextBlock Text="Enter the 24-character key on your card below." Margin="0,0,24,0"/>
+                    <TextBox Margin="0,4,0,32" x:Name="KeyBox" FontFamily="Consolas" KeyDown="KeyBox_KeyDown"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button x:Name="OkBtn" MinWidth="70" Content="OK" Click="OkBtn_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+</Window>

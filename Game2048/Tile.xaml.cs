@@ -58,7 +58,7 @@ namespace Game2048
         }
 
         public event EventHandler<TileTappedEventArgs> TileTapped;
-        public class TileTappedEventArgs
+        public class TileTappedEventArgs : EventArgs
         {
             Tile TileTapped { get; }
             public TileTappedEventArgs(Tile tileTapped)

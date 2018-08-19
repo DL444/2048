@@ -12,11 +12,7 @@
     </UserControl.RenderTransform>
 
     <Grid x:Name="BackGrid" Margin="5" Background="DarkGreen">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="3*"/>
-            <RowDefinition Height="92*"/>
-        </Grid.RowDefinitions>
-        <Viewbox Grid.RowSpan="2">
+        <Viewbox>
             <Label Name="NumberBox" Content="0" FontWeight="Light"/>
         </Viewbox>
     </Grid>

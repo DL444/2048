@@ -5,7 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="2048" Height="450" Width="650" Background="LightGray" Icon="2048Icon-01.png" Closing="Window_Closing">
+        Title="2048" Height="450" Width="650" Icon="2048Icon-01.png" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="White"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <!--<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -79,11 +87,18 @@
         </Grid.ColumnDefinitions>
         <Grid x:Name="MainGrid" Grid.Column="0" Grid.Row="0"/>
         <StackPanel x:Name="EntryPanel" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120">
-            <Label Content="New Game" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="GreetBox" Text="Hello!" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,4">
+                <TextBlock Text="Coins: "/>
+                <TextBlock x:Name="CoinBox" Text="0"/>
+            </StackPanel>
+            <Button x:Name="RedeemCardBtn" Content="Redeem Coins" Margin="10,4,10,4" Click="RedeemCardBtn_Click"/>
+            <Button x:Name="ThemeBtn" Content="Themes" Margin="10,4,10,10" Click="ThemeBtn_Click"/>
+            <Label Content="New Game" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame6" Tag="6" Content="6 * 6" Margin="10" Click="NewGameBtns_Click"/>
-            <Label Content="Mode" HorizontalAlignment="Center"/>
+            <Label Content="Mode" HorizontalAlignment="Center" FontWeight="Bold"/>
             <ComboBox x:Name="ModeBox" SelectedIndex="0">
                 <ComboBoxItem>Normal</ComboBoxItem>
                 <ComboBoxItem>Timed (Add Tile)</ComboBoxItem>

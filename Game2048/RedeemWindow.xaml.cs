@@ -16,16 +16,26 @@ using static LoginClient2048.LoginClient;
 namespace Game2048
 {
     /// <summary>
-    /// Interaction logic for Tools.xaml
+    /// Interaction logic for RedeemWindow.xaml
     /// </summary>
-    public partial class ToolsWindow : Window
+    public partial class RedeemWindow : Window
     {
         bool requesting = false;
-        public int Coins { get; private set; } = 0;
         public string Sid { get; set; } = "";
         public string Username { get; set; } = "";
+        public int Coins { get; set; } = 0;
+        bool Requesting
+        {
+            get => requesting;
+            set
+            {
+                requesting = value;
+                KeyBox.IsEnabled = !value;
+                OkBtn.IsEnabled = !value;
+            }
+        }
 
-        public ToolsWindow()
+        public RedeemWindow()
         {
             InitializeComponent();
         }
@@ -33,21 +43,19 @@ namespace Game2048
         private async void OkBtn_Click(object sender, RoutedEventArgs e)
         {
             if (requesting) { return; }
-            requesting = true;
+            Requesting = true;
             try
             {
-                Coins = await InitiateTransaction(Username, Sid, (this.DataContext as ToolsWindowViewModel).Cost);
+                Coins = await RedeemCard(Username, Sid, KeyBox.Text);
             }
-            catch (InsufficientFundException)
+            catch(CardInvalidException)
             {
-                MessageBoxResult result = MessageBox.Show("You do not have enough coins. Redeem some now?", "Insufficient fund", MessageBoxButton.YesNo);
-                if(result == MessageBoxResult.Yes)
-                {
-                    RedeemWindow redeemWindow = new RedeemWindow();
-                    redeemWindow.Username = Username;
-                    redeemWindow.Sid = Sid;
-                    redeemWindow.ShowDialog();
-                }
+                MessageBox.Show("The key entered is not valid. Please check and try again.", "Key invalid");
+                return;
+            }
+            catch(CardRedeemedException)
+            {
+                MessageBox.Show("This card is already redeemed. Please try a new one.", "Card redeemed");
                 return;
             }
             catch (InvalidCredentialException)
@@ -62,15 +70,23 @@ namespace Game2048
             }
             catch (Exception)
             {
-                MessageBox.Show("Transaction failed. Please check your Internet connection.", "Connection failed");
+                MessageBox.Show("Redeem failed. Please check your Internet connection.", "Connection failed");
                 return;
             }
             finally
             {
-                requesting = false;
+                Requesting = false;
             }
-            DialogResult = true;
+            this.DialogResult = true;
             this.Close();
+        }
+
+        private void KeyBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(!Requesting && e.Key == Key.Enter)
+            {
+                OkBtn_Click(this, null);
+            }
         }
     }
 }

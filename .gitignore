@@ -259,3 +259,7 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/CardGen2048
+/Login2048
+/Prepaid2048
+/LoginClient2048

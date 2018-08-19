@@ -28,16 +28,62 @@ namespace Game2048
         bool ctrlDown = false;
         bool enabled = true;
 
+        ITileTheme brushSet = new DefaultTheme();
+
+        string sid = "";
+        string username = "";
+        int coins = 0;
+
         Random randomizer = new Random(DateTime.Now.Millisecond);
 
         System.Timers.Timer timer = new System.Timers.Timer(1500);
 
+        public int Coins
+        {
+            get => coins;
+            set
+            {
+                coins = value;
+                CoinBox.Text = value.ToString();
+            }
+        }
+
+        public ITileTheme BrushSet
+        {
+            get => brushSet;
+            set
+            {
+                brushSet = value;
+                if(gameBoard != null)
+                {
+                    gameBoard.BrushSet = brushSet;
+                }
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            LoginDialog loginDlg = new LoginDialog();
+            bool? loginResult = loginDlg.ShowDialog();
+            if(loginResult == true)
+            {
+                sid = loginDlg.Sid;
+                username = loginDlg.Username;
+                Coins = loginDlg.Coins;
+                GreetBox.Text = $"Hello, {username}!";
+            }
+            else
+            {
+                Application.Current.Shutdown();
+                return;
+            }
+
+
             ParentGrid.Focus();
-            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
             timer.Elapsed += Timer_Elapsed;
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
             if (File.Exists(path))
             {
                 GameState state = null;
@@ -59,7 +105,12 @@ namespace Game2048
                 }
                 readStream.Close();
                 brd = state.Brd;
-                gameBoard = new GameBoard(brd);
+                if(gameBoard != null)
+                {
+                    gameBoard.TouchMoveBoard -= GameBoard_TouchMoveBoard;
+                }
+                gameBoard = new GameBoard(brd, BrushSet);
+                gameBoard.TouchMoveBoard += GameBoard_TouchMoveBoard;
                 enabled = state.Enabled;
                 ShowSaved(brd);
             }
@@ -67,6 +118,36 @@ namespace Game2048
             {
                 NewGame(4);
                 timer.Start();
+            }
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Theme.xml");
+            if (File.Exists(path))
+            {
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    string themeStr = reader.ReadToEnd();
+                    SetTheme(themeStr);
+                }
+            }
+        }
+
+        private void GameBoard_TouchMoveBoard(object sender, GameBoard.TouchMoveBoardEventArgs e)
+        {
+            if (timer.Enabled) { return; }
+            if(e.Direction == GameBoard.TouchMoveDirection.Down)
+            {
+                brd.Move(Board.MoveDirection.Down);
+            }
+            else if (e.Direction == GameBoard.TouchMoveDirection.Up)
+            {
+                brd.Move(Board.MoveDirection.Up);
+            }
+            else if (e.Direction == GameBoard.TouchMoveDirection.Left)
+            {
+                brd.Move(Board.MoveDirection.Left);
+            }
+            else
+            {
+                brd.Move(Board.MoveDirection.Right);
             }
         }
 
@@ -120,7 +201,13 @@ namespace Game2048
                 brd = new Board(size);
             }
 
-            gameBoard = new GameBoard(brd);
+            if (gameBoard != null)
+            {
+                gameBoard.TouchMoveBoard -= GameBoard_TouchMoveBoard;
+            }
+
+            gameBoard = new GameBoard(brd, BrushSet);
+            gameBoard.TouchMoveBoard += GameBoard_TouchMoveBoard;
             MainGrid.Children.Clear();
             MainGrid.Children.Add(gameBoard);
             brd.ScoreChanged += Brd_ScoreChangedEvent;
@@ -314,6 +401,26 @@ namespace Game2048
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if(BrushSet is UserTheme t)
+            {
+                string themePath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Theme.xml");
+                try
+                {
+                    using (StreamWriter themeWriter = new StreamWriter(themePath))
+                    {
+                        themeWriter.Write(t.XmlString);
+                    }
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    string dirPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048");
+                    Directory.CreateDirectory(dirPath);
+                    using (StreamWriter themeWriter = new StreamWriter(themePath))
+                    {
+                        themeWriter.Write(t.XmlString);
+                    }
+                }
+            }
             if(timer.Enabled == true) { return; }
             GameState state = new GameState(brd, enabled);
             string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
@@ -336,49 +443,108 @@ namespace Game2048
             }
         }
 
-        private void BombBtn_Click(object sender, RoutedEventArgs e)
+        private async void BombBtn_Click(object sender, RoutedEventArgs e)
         {
             if(brd is ItemBoard b)
             {
                 ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Bomb, b);
                 ToolsWindow window = new ToolsWindow();
                 window.DataContext = vm;
+                window.Sid = sid;
+                window.Username = username;
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
                     b.RemoveTile(vm.Row - 1, vm.Column - 1);
                 }
+                else
+                {
+                    try
+                    {
+                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
+                    }
+                    catch (Exception) { }
+                }
             }
         }
 
-        private void WildcardBtn_Click(object sender, RoutedEventArgs e)
+        private async void WildcardBtn_Click(object sender, RoutedEventArgs e)
         {
             if (brd is ItemBoard b)
             {
                 ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Wildcard, b);
                 ToolsWindow window = new ToolsWindow();
                 window.DataContext = vm;
+                window.Sid = sid;
+                window.Username = username;
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
                     b.AddTile(vm.Value, vm.Row - 1, vm.Column - 1);
                 }
+                else
+                {
+                    try
+                    {
+                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
+                    }
+                    catch (Exception) { }
+                }
             }
         }
 
-        private void PromoteBtn_Click(object sender, RoutedEventArgs e)
+        private async void PromoteBtn_Click(object sender, RoutedEventArgs e)
         {
             if (brd is ItemBoard b)
             {
                 ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Promote, b);
                 ToolsWindow window = new ToolsWindow();
                 window.DataContext = vm;
+                window.Sid = sid;
+                window.Username = username;
                 window.ShowDialog();
                 if (window.DialogResult == true)
                 {
                     b.PromoteTile(vm.Row - 1, vm.Column - 1);
                 }
+                else
+                {
+                    try
+                    {
+                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
+                    }
+                    catch (Exception) { }
+                }
             }
+        }
+
+        private void RedeemCardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            RedeemWindow redeemWin = new RedeemWindow();
+            redeemWin.Sid = sid;
+            redeemWin.Username = username;
+            bool? result = redeemWin.ShowDialog();
+            if(result == true)
+            {
+                Coins = redeemWin.Coins;
+            }
+        }
+
+        private void ThemeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ThemeSelector selector = new ThemeSelector();
+            bool? result = selector.ShowDialog();
+            if(result == true)
+            {
+                string content = selector.ThemeContent;
+                SetTheme(content);
+            }
+        }
+
+        private void SetTheme(string content)
+        {
+            UserTheme theme = new UserTheme(content);
+            BrushSet = theme;
         }
     }
 

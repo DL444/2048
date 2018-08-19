@@ -9,7 +9,7 @@
              ">
     <Grid>
         <Viewbox>
-            <Grid x:Name="BoardGrid" Height="1000" Width="1000" Margin="10"/>
+            <Grid x:Name="BoardGrid" Height="1000" Width="1000" Margin="10" TouchUp="BoardGrid_TouchUp" TouchDown="BoardGrid_TouchDown" Background="Transparent"/>
         </Viewbox>
     </Grid>
 </UserControl>

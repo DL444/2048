@@ -571,7 +571,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public Board(SerializationInfo info, StreamingContext context)
+        protected Board(SerializationInfo info, StreamingContext context)
         {
             Size = (int)info.GetValue("size", typeof(int));
             board = (int[,])info.GetValue("board", typeof(int[,]));
@@ -697,7 +697,7 @@ namespace Lib2048
         }
 
         protected event EventHandler<TileRemovedEventArgs> TileRemoved;
-        public class TileRemovedEventArgs
+        public class TileRemovedEventArgs : EventArgs
         {
             public TileRemovedEventArgs(int value, (int row, int column) location)
             {
@@ -711,7 +711,7 @@ namespace Lib2048
         }
 
         protected event EventHandler<TilePromotedEventArgs> TilePromoted;
-        public class TilePromotedEventArgs
+        public class TilePromotedEventArgs : EventArgs
         {
             public TilePromotedEventArgs((int row, int column) location, int oldValue, int newValue)
             {
@@ -990,7 +990,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public TimedBoard(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected TimedBoard(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             performCount = (int)info.GetValue("performCount", typeof(int));
             Interval = (double)info.GetValue("interval", typeof(double));
@@ -1086,7 +1086,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public TimedAddTileBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        TimedAddTileBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
     /// <summary>
     /// A 2048 board that reduces specified score at a specified interval.
@@ -1167,7 +1167,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public TimedReduceScoreBoard(SerializationInfo info, StreamingContext context) : base(info, context)
+        TimedReduceScoreBoard(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             ReduceScore = (int)info.GetValue("reduceScore", typeof(int));
         }
@@ -1241,7 +1241,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public TimedDeathBoard(SerializationInfo info, StreamingContext context) : base(info, context)
+        TimedDeathBoard(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             RemainingTime = (long)info.GetValue("remainingTime", typeof(long));
         }
@@ -1348,7 +1348,7 @@ namespace Lib2048
         /// </summary>
         /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
         /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
-        public ObstacledBoard(SerializationInfo info, StreamingContext context) : base(info, context)
+        ObstacledBoard(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             ObstacleCount = (int)info.GetValue("obstacleCount", typeof(int));
         }
@@ -1361,7 +1361,7 @@ namespace Lib2048
         public ItemBoard() : this(4) { }
 
         public ItemBoard(ItemBoard board) : base(board) { }
-        public ItemBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
+        ItemBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
 
         public override Board Copy()
         {

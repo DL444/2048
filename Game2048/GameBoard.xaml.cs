@@ -28,6 +28,9 @@ namespace Game2048
         Tile[,] tiles;
         ITileTheme brushSet = new DefaultTheme();
 
+        bool isMoving = false;
+        TouchPoint startPt = null;
+
         public ITileTheme BrushSet
         {
             get => brushSet;
@@ -38,7 +41,8 @@ namespace Game2048
             }
         }
 
-        public GameBoard(Board refBoard)
+        public GameBoard(Board refBoard) : this(refBoard, new DefaultTheme()) { }
+        public GameBoard(Board refBoard, ITileTheme brushSet)
         {
             InitializeComponent();
             this.refBoard = refBoard;
@@ -51,12 +55,13 @@ namespace Game2048
             }
             this.refBoard.TilesMoved += RefBoard_TilesMovedEvent;
             this.refBoard.TileAdded += RefBoard_TileAdded;
-            if(refBoard is ItemBoard b)
+            if (refBoard is ItemBoard b)
             {
                 b.TilePromoted += ItemBoard_TilePromoted;
                 b.TileRemoved += ItemBoard_TileRemoved;
             }
             tiles = new Tile[size, size];
+            BrushSet = brushSet;
             DisplayBoard();
         }
 
@@ -185,6 +190,60 @@ namespace Game2048
         void AddTile()
         {
 
+        }
+
+        private void BoardGrid_TouchUp(object sender, TouchEventArgs e)
+        {
+            if(isMoving)
+            {
+                isMoving = false;
+                TouchPoint endPt = e.GetTouchPoint(BoardGrid);
+                double deltaX = startPt.Position.X - endPt.Position.X;
+                double deltaY = startPt.Position.Y - endPt.Position.Y;
+                if(Math.Abs(Math.Abs(deltaX) - Math.Abs(deltaY)) > 100)
+                {
+                    if(Math.Abs(deltaX) > Math.Abs(deltaY))
+                    {
+                        if(deltaX > 0)
+                        {
+                            TouchMoveBoard?.Invoke(this, new TouchMoveBoardEventArgs(TouchMoveDirection.Left));
+                        }
+                        else
+                        {
+                            TouchMoveBoard?.Invoke(this, new TouchMoveBoardEventArgs(TouchMoveDirection.Right));
+                        }
+                    }
+                    else
+                    {
+                        if (deltaY > 0)
+                        {
+                            TouchMoveBoard?.Invoke(this, new TouchMoveBoardEventArgs(TouchMoveDirection.Up));
+                        }
+                        else
+                        {
+                            TouchMoveBoard?.Invoke(this, new TouchMoveBoardEventArgs(TouchMoveDirection.Down));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void BoardGrid_TouchDown(object sender, TouchEventArgs e)
+        {
+            isMoving = true;
+            startPt = e.GetTouchPoint(BoardGrid);
+        }
+
+        public event EventHandler<TouchMoveBoardEventArgs> TouchMoveBoard;
+        public class TouchMoveBoardEventArgs : EventArgs
+        {
+            public TouchMoveDirection Direction { get; private set; }
+
+            public TouchMoveBoardEventArgs(TouchMoveDirection direction) => Direction = direction;
+        }
+        public enum TouchMoveDirection
+        {
+            Up, Down, Left, Right
         }
     }
 }
