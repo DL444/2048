@@ -21,7 +21,6 @@ namespace ThemeSerializer2048
             StringBuilder builder = new StringBuilder();
             using (XmlWriter writer = XmlWriter.Create(builder))
             {
-                //writer.WriteStartDocument();
                 writer.WriteStartElement("Theme");
                 writer.WriteAttributeString("Name", Name);
                 writer.WriteAttributeString("Repeat", Repeat == true ? "true" : "false");
@@ -135,11 +134,7 @@ namespace ThemeSerializer2048
             {
                 for(int i = 1; i < 9; i++)
                 {
-                    if((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'A' && str[i] <= 'F')) { }
-                    else
-                    {
-                        return false;
-                    }
+                    if (!((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'A' && str[i] <= 'F'))) { return false; }
                 }
             }
             else

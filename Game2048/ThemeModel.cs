@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using MicroMvvm;
-using System.Text.RegularExpressions;
 
 namespace Game2048
 {

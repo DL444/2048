@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MicroMvvm;
 using System.Text.RegularExpressions;
+using System.Windows.Controls;
 
 namespace Theme2048
 {
@@ -300,6 +301,38 @@ namespace Theme2048
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return !(bool)value;
+        }
+    }
+
+    public class ColorValidator : System.Windows.Controls.ValidationRule
+    {
+        public ColorValidator() { }
+
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            string str = (string)value;
+            if(ValidateColor(str) == false)
+            {
+                return new ValidationResult(false, "Not a valid ARGB color string.");
+            }
+            return ValidationResult.ValidResult;
+        }
+
+        static bool ValidateColor(string input)
+        {
+            string str = input.ToUpper();
+            if (str.StartsWith("#") && str.Length == 9)
+            {
+                for (int i = 1; i < 9; i++)
+                {
+                    if (!((str[i] >= '0' && str[i] <= '9') || (str[i] >= 'A' && str[i] <= 'F'))) { return false; }
+                }
+            }
+            else
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

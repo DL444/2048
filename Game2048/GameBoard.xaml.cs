@@ -1,19 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Lib2048;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Lib2048;
 
 namespace Game2048
 {
@@ -28,7 +19,7 @@ namespace Game2048
         Tile[,] tiles;
         ITileTheme brushSet = new DefaultTheme();
 
-        bool isMoving = false;
+        bool fingerPresent = false;
         TouchPoint startPt = null;
 
         public ITileTheme BrushSet
@@ -138,7 +129,7 @@ namespace Game2048
             foreach(Board.MoveResult.Move move in moves)
             {
                 Tile tile = tiles[move.Original.row, move.Original.column];
-                bool isX = false;
+                bool isY = false;
                 double distance = 0;
                 TranslateTransform translateTransform = new TranslateTransform();
                 
@@ -149,17 +140,16 @@ namespace Game2048
                 else
                 {
                     distance = cellSize * (move.Destination.row - move.Original.row);
-                    isX = true;
+                    isY = true;
                 }
                 DoubleAnimation moveAnimation = new DoubleAnimation();
                 moveAnimation.By = distance;
                 moveAnimation.Duration = new Duration(new TimeSpan(2000000));
                 moveAnimation.Completed += MoveAnimation_Completed;
-                if(isX)
+                if(isY)
                 {
                     try
                     {
-                        tile.RenderTransform = new TranslateTransform(0, 0);
                         ongoingAnimation++;
                         tile.RenderTransform.BeginAnimation(TranslateTransform.YProperty, moveAnimation);
                     }
@@ -169,7 +159,6 @@ namespace Game2048
                 {
                     try
                     {
-                        tile.RenderTransform = new TranslateTransform(0, 0);
                         ongoingAnimation++;
                         tile.RenderTransform.BeginAnimation(TranslateTransform.XProperty, moveAnimation);
                     }
@@ -194,15 +183,17 @@ namespace Game2048
 
         private void BoardGrid_TouchUp(object sender, TouchEventArgs e)
         {
-            if(isMoving)
+            if(fingerPresent)
             {
-                isMoving = false;
+                fingerPresent = false;
                 TouchPoint endPt = e.GetTouchPoint(BoardGrid);
                 double deltaX = startPt.Position.X - endPt.Position.X;
                 double deltaY = startPt.Position.Y - endPt.Position.Y;
-                if(Math.Abs(Math.Abs(deltaX) - Math.Abs(deltaY)) > 100)
+                double deltaXAbs = Abs(deltaX);
+                double deltaYAbs = Abs(deltaY);
+                if(Abs(deltaXAbs - deltaYAbs) > 100)
                 {
-                    if(Math.Abs(deltaX) > Math.Abs(deltaY))
+                    if(deltaXAbs > deltaYAbs)
                     {
                         if(deltaX > 0)
                         {
@@ -226,11 +217,13 @@ namespace Game2048
                     }
                 }
             }
+
+            double Abs(double x) => x < 0 ? -x : x;
         }
 
         private void BoardGrid_TouchDown(object sender, TouchEventArgs e)
         {
-            isMoving = true;
+            fingerPresent = true;
             startPt = e.GetTouchPoint(BoardGrid);
         }
 

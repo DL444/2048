@@ -12,6 +12,7 @@
     <Window.Resources>
         <local:ColorBrushConverter x:Key="ColorBrushConverter"/>
         <local:LevelStringConverter x:Key="LevelStringConverter"/>
+        <local:ColorValidator x:Key="ColorValidator"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="White"/>
         </Style>
@@ -45,9 +46,25 @@
                             </Viewbox>
                         </Grid>
                         <TextBlock Text="Background: " VerticalAlignment="Center" Margin="16,0,0,0"/>
-                        <TextBox Text="{Binding BackgroundColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="8,0,0,0" VerticalAlignment="Center" MinWidth="72"/>
+                        <TextBox Margin="8,0,0,0" VerticalAlignment="Center" MinWidth="82">
+                            <TextBox.Text>
+                                <Binding Path="BackgroundColor" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <local:ColorValidator/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                         <TextBlock Text="Foreground: " VerticalAlignment="Center" Margin="16,0,0,0"/>
-                        <TextBox Text="{Binding ForegroundColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="8,0,0,0" VerticalAlignment="Center" MinWidth="72"/>
+                        <TextBox Margin="8,0,0,0" VerticalAlignment="Center" MinWidth="82">
+                            <TextBox.Text>
+                                <Binding Path="ForegroundColor" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <local:ColorValidator/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
                     </StackPanel>
                 </DataTemplate>
             </ListView.ItemTemplate>

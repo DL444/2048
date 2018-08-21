@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Lib2048;
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Lib2048;
 
 namespace Game2048
 {
@@ -64,7 +56,6 @@ namespace Game2048
         public MainWindow()
         {
             InitializeComponent();
-
             LoginDialog loginDlg = new LoginDialog();
             bool? loginResult = loginDlg.ShowDialog();
             if(loginResult == true)
@@ -278,6 +269,7 @@ namespace Game2048
 
         void DemoRun()
         {
+            if(timer.Enabled == false) { return; }
             brd.Move((Board.MoveDirection)randomizer.Next(0, 4));
         }
 
@@ -421,7 +413,7 @@ namespace Game2048
                     }
                 }
             }
-            if(timer.Enabled == true) { return; }
+            if(timer.Enabled == true || sid == "") { return; }
             GameState state = new GameState(brd, enabled);
             string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
             Stream saveStream;
@@ -456,6 +448,7 @@ namespace Game2048
                 if (window.DialogResult == true)
                 {
                     b.RemoveTile(vm.Row - 1, vm.Column - 1);
+                    Coins = window.Coins;
                 }
                 else
                 {
@@ -481,6 +474,7 @@ namespace Game2048
                 if (window.DialogResult == true)
                 {
                     b.AddTile(vm.Value, vm.Row - 1, vm.Column - 1);
+                    Coins = window.Coins;
                 }
                 else
                 {
@@ -506,6 +500,7 @@ namespace Game2048
                 if (window.DialogResult == true)
                 {
                     b.PromoteTile(vm.Row - 1, vm.Column - 1);
+                    Coins = window.Coins;
                 }
                 else
                 {
