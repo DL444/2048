@@ -17,8 +17,8 @@ namespace Theme2048
 {
     public class ThemeModel : INotifyPropertyChanged
     {
-        public bool _repeat = false;
-        public string _name = "";
+        bool _repeat = false;
+        string _name = "";
 
         public ObservableCollection<TileThemeEntry> TileThemes { get; set; } = new ObservableCollection<TileThemeEntry>();
         public bool Repeat

@@ -131,7 +131,6 @@ namespace Game2048
                 Tile tile = tiles[move.Original.row, move.Original.column];
                 bool isY = false;
                 double distance = 0;
-                TranslateTransform translateTransform = new TranslateTransform();
                 
                 if(move.Original.row == move.Destination.row)
                 {

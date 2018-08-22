@@ -22,6 +22,8 @@ namespace Game2048
 
         ITileTheme brushSet = new DefaultTheme();
 
+        GameSoundPlayer soundPlayer = new GameSoundPlayer();
+
         string sid = "";
         string username = "";
         int coins = 0;
@@ -110,6 +112,35 @@ namespace Game2048
                 NewGame(4);
                 timer.Start();
             }
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Settings.dat");
+            if (File.Exists(path))
+            {
+                SoundState state = null;
+                Stream readStream = File.OpenRead(path);
+                BinaryFormatter formatter = new BinaryFormatter();
+                try
+                {
+                    state = formatter.Deserialize(readStream) as SoundState;
+                }
+                catch (System.Runtime.Serialization.SerializationException)
+                {
+
+                }
+                if (state == null)
+                {
+                    soundPlayer.Config(SoundState.Default);
+                }
+                else
+                {
+                    soundPlayer.Config(state);
+                }
+                readStream.Close();
+            }
+            else
+            {
+                soundPlayer.Config(SoundState.Default);
+            }
+
             path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Theme.xml");
             if (File.Exists(path))
             {
@@ -126,19 +157,51 @@ namespace Game2048
             if (timer.Enabled) { return; }
             if(e.Direction == GameBoard.TouchMoveDirection.Down)
             {
-                brd.Move(Board.MoveDirection.Down);
+                Board.MoveResult result = brd.Move(Board.MoveDirection.Down);
+                if (result.Count > 0)
+                {
+                    soundPlayer.PlaySfx(1);
+                }
+                else
+                {
+                    soundPlayer.PlaySfx(2);
+                }
             }
             else if (e.Direction == GameBoard.TouchMoveDirection.Up)
             {
-                brd.Move(Board.MoveDirection.Up);
+                Board.MoveResult result = brd.Move(Board.MoveDirection.Up);
+                if (result.Count > 0)
+                {
+                    soundPlayer.PlaySfx(1);
+                }
+                else
+                {
+                    soundPlayer.PlaySfx(2);
+                }
             }
             else if (e.Direction == GameBoard.TouchMoveDirection.Left)
             {
-                brd.Move(Board.MoveDirection.Left);
+                Board.MoveResult result = brd.Move(Board.MoveDirection.Left);
+                if (result.Count > 0)
+                {
+                    soundPlayer.PlaySfx(1);
+                }
+                else
+                {
+                    soundPlayer.PlaySfx(2);
+                }
             }
             else
             {
-                brd.Move(Board.MoveDirection.Right);
+                Board.MoveResult result = brd.Move(Board.MoveDirection.Right);
+                if (result.Count > 0)
+                {
+                    soundPlayer.PlaySfx(1);
+                }
+                else
+                {
+                    soundPlayer.PlaySfx(2);
+                }
             }
         }
 
@@ -275,22 +338,54 @@ namespace Game2048
 
         private void UpBtn_Click(object sender, RoutedEventArgs e)
         {
-            brd.Move(Board.MoveDirection.Up);
+            Board.MoveResult result = brd.Move(Board.MoveDirection.Up);
+            if(result.Count > 0)
+            {
+                soundPlayer.PlaySfx(1);
+            }
+            else
+            {
+                soundPlayer.PlaySfx(2);
+            }
         }
 
         private void DownBtn_Click(object sender, RoutedEventArgs e)
         {
-            brd.Move(Board.MoveDirection.Down);
+            Board.MoveResult result = brd.Move(Board.MoveDirection.Down);
+            if (result.Count > 0)
+            {
+                soundPlayer.PlaySfx(1);
+            }
+            else
+            {
+                soundPlayer.PlaySfx(2);
+            }
         }
 
         private void LeftBtn_Click(object sender, RoutedEventArgs e)
         {
-            brd.Move(Board.MoveDirection.Left);
+            Board.MoveResult result = brd.Move(Board.MoveDirection.Left);
+            if (result.Count > 0)
+            {
+                soundPlayer.PlaySfx(1);
+            }
+            else
+            {
+                soundPlayer.PlaySfx(2);
+            }
         }
 
         private void RightBtn_Click(object sender, RoutedEventArgs e)
         {
-            brd.Move(Board.MoveDirection.Right);
+            Board.MoveResult result = brd.Move(Board.MoveDirection.Right);
+            if (result.Count > 0)
+            {
+                soundPlayer.PlaySfx(1);
+            }
+            else
+            {
+                soundPlayer.PlaySfx(2);
+            }
         }
 
         private void NewGameBtns_Click(object sender, RoutedEventArgs e)
@@ -413,10 +508,29 @@ namespace Game2048
                     }
                 }
             }
-            if(timer.Enabled == true || sid == "") { return; }
-            GameState state = new GameState(brd, enabled);
-            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
+            SoundState sndState = new SoundState(soundPlayer.BgmOn, soundPlayer.BgmVolume, soundPlayer.SfxOn, soundPlayer.SfxVolume);
+            string path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Settings.dat");
             Stream saveStream;
+            try
+            {
+                saveStream = File.Create(path);
+            }
+            catch (DirectoryNotFoundException)
+            {
+                string dirPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048");
+                Directory.CreateDirectory(dirPath);
+                saveStream = File.Create(path);
+            }
+            BinaryFormatter formatter = new BinaryFormatter();
+            if (saveStream != null)
+            {
+                formatter.Serialize(saveStream, sndState);
+                saveStream.Close();
+            }
+
+            if (timer.Enabled == true || sid == "") { return; }
+            GameState state = new GameState(brd, enabled);
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
             try
             {
                 saveStream = File.Create(path);
@@ -427,7 +541,7 @@ namespace Game2048
                 Directory.CreateDirectory(dirPath);
                 saveStream = File.Create(path);
             }
-            BinaryFormatter formatter = new BinaryFormatter();
+            formatter = new BinaryFormatter();
             if(saveStream != null)
             {
                 formatter.Serialize(saveStream, state);
@@ -439,79 +553,58 @@ namespace Game2048
         {
             if(brd is ItemBoard b)
             {
-                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Bomb, b);
-                ToolsWindow window = new ToolsWindow();
-                window.DataContext = vm;
-                window.Sid = sid;
-                window.Username = username;
-                window.ShowDialog();
-                if (window.DialogResult == true)
-                {
-                    b.RemoveTile(vm.Row - 1, vm.Column - 1);
-                    Coins = window.Coins;
-                }
-                else
-                {
-                    try
-                    {
-                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
-                    }
-                    catch (Exception) { }
-                }
+                await ProcessTools(b, ToolsMode.Bomb);
             }
         }
-
         private async void WildcardBtn_Click(object sender, RoutedEventArgs e)
         {
             if (brd is ItemBoard b)
             {
-                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Wildcard, b);
-                ToolsWindow window = new ToolsWindow();
-                window.DataContext = vm;
-                window.Sid = sid;
-                window.Username = username;
-                window.ShowDialog();
-                if (window.DialogResult == true)
-                {
-                    b.AddTile(vm.Value, vm.Row - 1, vm.Column - 1);
-                    Coins = window.Coins;
-                }
-                else
-                {
-                    try
-                    {
-                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
-                    }
-                    catch (Exception) { }
-                }
+                await ProcessTools(b, ToolsMode.Wildcard);
             }
         }
-
         private async void PromoteBtn_Click(object sender, RoutedEventArgs e)
         {
             if (brd is ItemBoard b)
             {
-                ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, ToolsMode.Promote, b);
-                ToolsWindow window = new ToolsWindow();
-                window.DataContext = vm;
-                window.Sid = sid;
-                window.Username = username;
-                window.ShowDialog();
-                if (window.DialogResult == true)
-                {
-                    b.PromoteTile(vm.Row - 1, vm.Column - 1);
-                    Coins = window.Coins;
-                }
-                else
-                {
-                    try
-                    {
-                        Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
-                    }
-                    catch (Exception) { }
-                }
+                await ProcessTools(b, ToolsMode.Promote);
             }
         }
+
+        private async Task ProcessTools(ItemBoard b, ToolsMode mode)
+        {
+            ToolsWindowViewModel vm = new ToolsWindowViewModel(brd.Size, mode, b);
+            ToolsWindow window = new ToolsWindow();
+            window.DataContext = vm;
+            window.Sid = sid;
+            window.Username = username;
+            window.ShowDialog();
+            if (window.DialogResult == true)
+            {
+                switch (mode)
+                {
+                    case ToolsMode.Bomb:
+                        b.RemoveTile(vm.Row - 1, vm.Column - 1);
+                        break;
+                    case ToolsMode.Promote:
+                        b.PromoteTile(vm.Row - 1, vm.Column - 1);
+                        break;
+                    case ToolsMode.Wildcard:
+                        b.AddTile(vm.Value, vm.Row - 1, vm.Column - 1);
+                        break;
+                }
+                Coins = window.Coins;
+            }
+            else
+            {
+                try
+                {
+                    Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
+                }
+                catch (Exception) { }
+            }
+        }
+
 
         private void RedeemCardBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -540,6 +633,13 @@ namespace Game2048
         {
             UserTheme theme = new UserTheme(content);
             BrushSet = theme;
+        }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Settings window = new Settings();
+            window.DataContext = soundPlayer;
+            window.ShowDialog();
         }
     }
 

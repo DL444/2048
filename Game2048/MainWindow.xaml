@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="2048" Height="450" Width="650" Icon="2048Icon-01.png" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
+        Title="2048" Height="450" Width="650" MinWidth="600" MinHeight="400" Icon="2048Icon-01.png" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="Button">
@@ -93,7 +93,8 @@
                 <TextBlock x:Name="CoinBox" Text="0"/>
             </StackPanel>
             <Button x:Name="RedeemCardBtn" Content="Redeem Coins" Margin="10,4,10,4" Click="RedeemCardBtn_Click"/>
-            <Button x:Name="ThemeBtn" Content="Themes" Margin="10,4,10,10" Click="ThemeBtn_Click"/>
+            <Button x:Name="ThemeBtn" Content="Themes" Margin="10,4,10,4" Click="ThemeBtn_Click"/>
+            <Button x:Name="SettingsBtn" Content="Settings" Margin="10,4,10,10" Click="SettingsBtn_Click"/>
             <Label Content="New Game" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
