@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LoginClient2048\LoginClient2048.csproj" />
     <ProjectReference Include="..\ThemeSerializer2048\ThemeSerializer2048.csproj" />
   </ItemGroup>
 

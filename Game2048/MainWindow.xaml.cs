@@ -310,7 +310,7 @@ namespace Game2048
         //    TimeLabel.Content = $"Time: {600000 - e.TotalTime}";
         //}
 
-        private void Brd_GameFailedEvent(object sender, Board.GameFailedEventArgs e)
+        private async void Brd_GameFailedEvent(object sender, Board.GameFailedEventArgs e)
         {
             Dispatcher.Invoke(() => 
             {
@@ -323,6 +323,37 @@ namespace Game2048
                     }
                 }
             });
+            int mode = 0;
+            switch (brd)
+            {
+                case TimedAddTileBoard _:
+                    mode = 1;
+                    break;
+                case TimedReduceScoreBoard _:
+                    mode = 2;
+                    break;
+                case TimedDeathBoard _:
+                    mode = 3;
+                    break;
+                case ObstacledBoard _:
+                    mode = 4;
+                    break;
+                case ItemBoard _:
+                    mode = 5;
+                    break;
+            }
+            try
+            {
+                await LoginClient2048.LoginClient.AddHighscore(username, sid, mode, brd.Size, brd.Score);
+            }
+            catch(LoginClient2048.LoginClient.InvalidCredentialException)
+            {
+                MessageBox.Show("Your login session has expired. Please sign in again.", "Session expired");
+            }
+            catch(Exception)
+            {
+                MessageBox.Show("Score upload failed. Please check your Internet connection.", "Connection failed");
+            }
         }
 
         private void Brd_ScoreChangedEvent(object sender, Board.ScoreChangedEventArgs e)
@@ -640,6 +671,12 @@ namespace Game2048
             Settings window = new Settings();
             window.DataContext = soundPlayer;
             window.ShowDialog();
+        }
+
+        private void HighscoreBtn_Click(object sender, RoutedEventArgs e)
+        {
+            HighscoreWindow win = new HighscoreWindow();
+            win.ShowDialog();
         }
     }
 

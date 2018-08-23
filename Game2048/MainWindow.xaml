@@ -92,9 +92,21 @@
                 <TextBlock Text="Coins: "/>
                 <TextBlock x:Name="CoinBox" Text="0"/>
             </StackPanel>
-            <Button x:Name="RedeemCardBtn" Content="Redeem Coins" Margin="10,4,10,4" Click="RedeemCardBtn_Click"/>
-            <Button x:Name="ThemeBtn" Content="Themes" Margin="10,4,10,4" Click="ThemeBtn_Click"/>
-            <Button x:Name="SettingsBtn" Content="Settings" Margin="10,4,10,10" Click="SettingsBtn_Click"/>
+            <Grid Margin="10,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="HighscoreBtn" Grid.Column="0" Content="&#xE208;" FontFamily="Segoe MDL2 Assets" Height="24" Width="24" Padding="4" Click="HighscoreBtn_Click"/>
+                <Button x:Name="RedeemCardBtn" Grid.Column="1" Content="&#xE8C7;" FontFamily="Segoe MDL2 Assets" Height="24" Width="24" Padding="4" Click="RedeemCardBtn_Click"/>
+                <!--<Button x:Name="RedeemCardBtn" Content="Redeem Coins" Margin="10,4,10,4" Click="RedeemCardBtn_Click"/>-->
+                <Button x:Name="ThemeBtn" Grid.Column="2" Content="&#xE771;" FontFamily="Segoe MDL2 Assets" Height="24" Width="24" Padding="4" Click="ThemeBtn_Click"/>
+                <!--<Button x:Name="ThemeBtn" Content="Themes" Margin="10,4,10,4" Click="ThemeBtn_Click"/>-->
+                <Button x:Name="SettingsBtn" Grid.Column="3" Content="&#xE713;" FontFamily="Segoe MDL2 Assets" Height="24" Width="24" Padding="4" Click="SettingsBtn_Click"/>
+                <!--<Button x:Name="SettingsBtn" Content="Settings" Margin="10,4,10,10" Click="SettingsBtn_Click"/>-->
+            </Grid>
             <Label Content="New Game" HorizontalAlignment="Center" FontWeight="Bold"/>
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
