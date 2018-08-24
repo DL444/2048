@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Highscores" Height="600" Width="450" MinHeight="400" MinWidth="350" WindowStartupLocation="CenterScreen">
+        Title="Highscores" Height="600" Width="450" MinHeight="400" MinWidth="350" WindowStartupLocation="CenterScreen" Icon="/Game2048;component/2048IconSmall-01.png">
     <Window.DataContext>
         <local:HighscoreViewModel/>
     </Window.DataContext>

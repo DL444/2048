@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Settings" Height="450" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/Game2048;component/2048IconSmall-01.png">
     <Window.DataContext>
         <local:GameSoundPlayer/>
     </Window.DataContext>
@@ -24,6 +24,8 @@
             <Slider Value="{Binding SfxVolume, Mode=TwoWay}" Minimum="0" Maximum="1" Margin="0,0,0,16" LargeChange="0.1"/>
         </StackPanel>
         <Grid Background="LightGray" Grid.Row="1">
+            <!--<Button x:Name="ChangePwdBtn" Content="Change Password" MinWidth="120" HorizontalAlignment="Left" Margin="8"  Click=""/>-->
+            <Button x:Name="HelpBtn" Content="Tutorial" MinWidth="80" HorizontalAlignment="Left" Margin="8"  Click="HelpBtn_Click"/>
             <Button x:Name="OkBtn" Content="OK" MinWidth="80" HorizontalAlignment="Right" Margin="8" Click="OkBtn_Click"/>
         </Grid>
 

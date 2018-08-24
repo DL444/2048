@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Tools" Height="320" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="Tools" Height="320" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Icon="/Game2048;component/2048IconSmall-01.png">
     <Window.DataContext>
         <local:ToolsWindowViewModel/>
     </Window.DataContext>

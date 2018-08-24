@@ -48,8 +48,8 @@ namespace Theme2048
         void SelectTheme()
         {
             ThemeSelectorEntryModel selected = null;
-            ThemeSelector selector = new ThemeSelector();
-            selector.Sid = sid;
+            ThemeSelector selector = new ThemeSelector() { Sid = sid };
+            //selector.Sid = sid;
             selector.Username = username;
             bool? selectResult = selector.ShowDialog();
             if (selectResult == true)

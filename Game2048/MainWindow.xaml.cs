@@ -58,6 +58,10 @@ namespace Game2048
         public MainWindow()
         {
             InitializeComponent();
+
+            //Help.HelpWindow h = new Help.HelpWindow();
+            //h.ShowDialog();
+
             LoginDialog loginDlg = new LoginDialog();
             bool? loginResult = loginDlg.ShowDialog();
             if(loginResult == true)
@@ -139,6 +143,8 @@ namespace Game2048
             else
             {
                 soundPlayer.Config(SoundState.Default);
+                Help.HelpWindow helpwin = new Help.HelpWindow();
+                helpwin.ShowDialog();
             }
 
             path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\Theme.xml");
@@ -323,6 +329,7 @@ namespace Game2048
                     }
                 }
             });
+            if(timer.Enabled) { return; }
             int mode = 0;
             switch (brd)
             {

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Themes" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Icon="2048IconSmall-01.png" >
+        Title="Themes" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Icon="/Game2048;component/2048IconSmall-01.png">
     <Window.DataContext>
         <local:ThemeSelectorModel/>
     </Window.DataContext>

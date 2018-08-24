@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Theme2048"
         mc:Ignorable="d"
-        Title="Select Task" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Initialized="Window_Initialized" Icon="2048IconSmall-01.png" >
+        Title="Select Task" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="2048IconSmall-01.png" >
     <Window.DataContext>
         <local:ThemeSelectorModel/>
     </Window.DataContext>

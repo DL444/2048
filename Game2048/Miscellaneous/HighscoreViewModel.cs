@@ -60,7 +60,7 @@ namespace Game2048
                     }
                     else if(pair[0].IndexOf("time", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
-                        entry.DateTime = new DateTime(long.Parse(pair[1].Replace("}", "").Replace("]", "")));
+                        entry.DateTime = new DateTime(long.Parse(pair[1].Replace("}", "").Replace("]", ""))).AddHours(8);
                     }
                 }
                 Entries.Add(entry);

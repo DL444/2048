@@ -60,10 +60,10 @@ namespace Theme2048
             this.Close();
         }
 
-        private async void Window_Initialized(object sender, EventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             string entries = "";
-            while(true)
+            while (true)
             {
                 try
                 {
