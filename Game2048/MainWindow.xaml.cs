@@ -19,6 +19,7 @@ namespace Game2048
         Board brd;
         bool ctrlDown = false;
         bool enabled = true;
+        bool firstDeath = true;
 
         ITileTheme brushSet = new DefaultTheme();
 
@@ -102,6 +103,7 @@ namespace Game2048
                 }
                 readStream.Close();
                 brd = state.Brd;
+                firstDeath = state.FirstDeath;
                 if(gameBoard != null)
                 {
                     gameBoard.TouchMoveBoard -= GameBoard_TouchMoveBoard;
@@ -273,6 +275,8 @@ namespace Game2048
             brd.ScoreChanged += Brd_ScoreChangedEvent;
             brd.GameFailed += Brd_GameFailedEvent;
 
+            firstDeath = true;
+
             //if(brd is TimedDeathBoard)
             //{
             //    TimeLabel.Visibility = Visibility.Visible;
@@ -349,17 +353,22 @@ namespace Game2048
                     mode = 5;
                     break;
             }
-            try
+            if (firstDeath)
             {
-                await LoginClient2048.LoginClient.AddHighscore(username, sid, mode, brd.Size, brd.Score);
-            }
-            catch(LoginClient2048.LoginClient.InvalidCredentialException)
-            {
-                MessageBox.Show("Your login session has expired. Please sign in again.", "Session expired");
-            }
-            catch(Exception)
-            {
-                MessageBox.Show("Score upload failed. Please check your Internet connection.", "Connection failed");
+                firstDeath = false;
+                try
+                {
+                    await LoginClient2048.LoginClient.AddHighscore(username, sid, mode, brd.Size, brd.Score);
+                }
+                catch (LoginClient2048.LoginClient.InvalidCredentialException)
+                {
+                    MessageBox.Show("Your login session has expired. Please sign in again.", "Session expired");
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Score upload failed. Please check your Internet connection.", "Connection failed");
+                }
+
             }
         }
 
@@ -370,8 +379,14 @@ namespace Game2048
 
         void DemoRun()
         {
+            int count = 0;
             if(timer.Enabled == false) { return; }
-            brd.Move((Board.MoveDirection)randomizer.Next(0, 4));
+
+            do
+            {
+                count++;
+            }
+            while (brd.Move((Board.MoveDirection)randomizer.Next(0, 4)).Count == 0 && count < 5);
         }
 
         private void UpBtn_Click(object sender, RoutedEventArgs e)
@@ -567,7 +582,7 @@ namespace Game2048
             }
 
             if (timer.Enabled == true || sid == "") { return; }
-            GameState state = new GameState(brd, enabled);
+            GameState state = new GameState(brd, enabled, firstDeath);
             path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "2048\\SavedGame.dat");
             try
             {
@@ -639,7 +654,7 @@ namespace Game2048
                 {
                     Coins = await LoginClient2048.LoginClient.GetCoins(username, sid);
                 }
-                catch (Exception) { }
+                catch (LoginClient2048.LoginClient.LoginClientException) { }
             }
         }
 
@@ -692,10 +707,11 @@ namespace Game2048
     {
         public Board Brd { get; private set; }
         public bool Enabled { get; private set; }
+        public bool FirstDeath { get; private set; }
 
-        public GameState(Board brd, bool enabled)
+        public GameState(Board brd, bool enabled, bool firstDeath)
         {
-            Brd = brd.Copy(); Enabled = enabled;
+            Brd = brd.Copy(); Enabled = enabled; FirstDeath = firstDeath;
         }
     }
 }

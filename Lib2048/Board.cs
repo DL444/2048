@@ -263,14 +263,11 @@ namespace Lib2048
         bool AssertFailure()
         {
             Board tempBoard = this.Copy();
-            tempBoard.Move(MoveDirection.Up);
-            if (!tempBoard.StatesEqual()) { return false; }
-            tempBoard.Move(MoveDirection.Down);
-            if (!tempBoard.StatesEqual()) { return false; }
-            tempBoard.Move(MoveDirection.Left);
-            if (!tempBoard.StatesEqual()) { return false; }
-            tempBoard.Move(MoveDirection.Right);
-            if (!tempBoard.StatesEqual()) { return false; }
+
+            if(tempBoard.Move(MoveDirection.Up).Count != 0) { return false; }
+            if (tempBoard.Move(MoveDirection.Down).Count != 0) { return false; }
+            if (tempBoard.Move(MoveDirection.Left).Count != 0) { return false; }
+            if (tempBoard.Move(MoveDirection.Right).Count != 0) { return false; }
             return true;
         }
         /// <summary>
@@ -1454,7 +1451,7 @@ namespace Lib2048
         /// <param name="column">The column of the new tile.</param>
         /// <returns>A tuple containing the row and column of the new tile, or (-1, -1) if the specified cell is occupied.</returns>
         /// <remarks>
-        /// If a tile was successfully added, the method will fire <see cref="TileAdded"/> event.
+        /// If a tile was successfully added, the method will fire <see cref="Board.TileAdded"/> event.
         /// </remarks>
         public new (int row, int column) AddTile(int value, int row, int column) { return base.AddTile(value, row, column); }
 

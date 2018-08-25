@@ -263,3 +263,5 @@ __pycache__/
 /Login2048
 /Prepaid2048
 /LoginClient2048
+/Lib2048/Docs/docfx_project
+/Get-LineCount.ps1
