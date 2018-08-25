@@ -37,13 +37,13 @@ namespace Lib2048
         /// <summary>
         /// Internal pseudorandom number generator.
         /// </summary>
-        Random randomizer = new Random(DateTime.Now.Millisecond);
+        Random randomizer = new Random((int)DateTime.Now.Ticks);
         /// <summary>
         /// Current score.
         /// </summary>
         int score;
         /// <summary>
-        /// Initializes a new instance of the board with specified size.
+        /// Initializes a new instance of <see cref="Board"/> with specified size.
         /// </summary>
         /// <param name="size">The size of the board, represented by the number of cells in one dimension.</param>
         public Board(int size)
@@ -59,7 +59,7 @@ namespace Lib2048
             GenerateTile();
         }
         /// <summary>
-        /// Initializes a new instance of the board with 4 * 4 size.
+        /// Initializes a new instance of <see cref="Board"/> with 4 * 4 size.
         /// </summary>
         public Board() : this(4) { }
         /// <summary>
@@ -75,7 +75,7 @@ namespace Lib2048
                     this.board[i, j] = board[i, j];
                 }
             }
-            GetFreeTiles();
+            UpdateFreeCells();
             score = board.score;
             foreach((int[,] hBoard, int hScore) in board.history)
             {
@@ -95,7 +95,7 @@ namespace Lib2048
             history = (List<(int[,], int)>)info.GetValue("history", typeof(List<(int[,], int)>));
             randomizer = new Random(DateTime.Now.Millisecond);
             freeTiles = new List<int>(Size * Size);
-            GetFreeTiles();
+            UpdateFreeCells();
         }
         /// <summary>
         /// Occurs when the game failed.
@@ -109,7 +109,13 @@ namespace Lib2048
         /// Occurs when a new tile is added.
         /// </summary>
         public event EventHandler<TileAddedEventArgs> TileAdded;
+        /// <summary>
+        /// Occurs when a tile is promoted by calling <see cref="PromoteTile(int, int)"/> method.
+        /// </summary>
         protected event EventHandler<TilePromotedEventArgs> TilePromoted;
+        /// <summary>
+        /// Occurs when a tile is removed by calling <see cref="RemoveTile(int, int)"/> method.
+        /// </summary>
         protected event EventHandler<TileRemovedEventArgs> TileRemoved;
         /// <summary>
         /// Occurs when tiles are moved.
@@ -153,9 +159,10 @@ namespace Lib2048
         /// <summary>
         /// Gets the content of specified cell.
         /// </summary>
-        /// <param name="tile">The cell number. Number is assigned starting from the cell on the upper-left corner, going right
-        /// and wraping on new line, ending at the cell on the lower-right corner.</param>
+        /// <param name="tile">The cell number.</param>
         /// <returns>The number representation of the requested cell.</returns>
+        /// <remarks>The tile number is assigned starting from the cell on the upper-left corner, going right
+        /// and wraping on new line, ending at the cell on the lower-right corner.</remarks>
         public int this[int tile]
         {
             get => board[tile / Size, tile % Size];
@@ -167,6 +174,13 @@ namespace Lib2048
         {
             int[,] tempBrd = board.Clone() as int[,];
             history.Add((tempBrd, Score));
+        }
+        /// <summary>
+        /// Remove the last state in the history record.
+        /// </summary>
+        void RemoveHistoryRecord()
+        {
+            history.RemoveAt(history.Count - 1);
         }
         /// <summary>
         /// Generate a tile with specified value in a random empty cell.
@@ -191,7 +205,7 @@ namespace Lib2048
         /// </remarks>
         (int row, int column) AddTile(int value, bool moveInit)
         {
-            GetFreeTiles();
+            UpdateFreeCells();
             if (freeTiles.Count > 0)
             {
                 int tile = freeTiles[randomizer.Next(0, freeTiles.Count)];
@@ -229,7 +243,7 @@ namespace Lib2048
             if (board[row, column] != 0) { return (-1, -1); }
             board[row, column] = value;
             TileAdded?.Invoke(this, new TileAddedEventArgs(row, column, value, moveInit));
-            GetFreeTiles();
+            UpdateFreeCells();
             if (freeTiles.Count == 0)
             {
                 if (AssertFailure() == true)
@@ -242,7 +256,7 @@ namespace Lib2048
         /// <summary>
         /// Determine if the game has failed.
         /// </summary>
-        /// <returns>True if the game has failed, or otherwise False.</returns>
+        /// <returns><see langword="true"/> if the game has failed, or otherwise <see langword="false"/>.</returns>
         /// <remarks>
         /// The method also fires the <see cref="GameFailed"/> event if the game has failed.
         /// </remarks>
@@ -316,7 +330,7 @@ namespace Lib2048
         /// <summary>
         /// Update the free cell list.
         /// </summary>
-        void GetFreeTiles()
+        void UpdateFreeCells()
         {
             freeTiles.Clear();
             for (int i = 0; i < Size; i++)
@@ -342,9 +356,10 @@ namespace Lib2048
         /// <summary>
         /// Get the row and column of a tile specified by its number.
         /// </summary>
-        /// <param name="tile">The cell number. Number is assigned starting from the cell on the upper-left corner, going right
-        /// and wraping on new line, ending at the cell on the lower-right corner.</param>
+        /// <param name="tile">The cell number.</param>
         /// <returns>A tuple containing the row and column of the tile, or (-1, -1) if the cell does not exist in the current board.</returns>
+        /// <remarks>The tile number is assigned starting from the cell on the upper-left corner, going right
+        /// and wraping on new line, ending at the cell on the lower-right corner.</remarks>
         public (int row, int column) GetTileCoordinate(int tile)
         {
             if(tile > Size * Size - 1) { return (-1, -1); }
@@ -367,6 +382,10 @@ namespace Lib2048
             {
                 GenerateTile(true);
                 TilesMoved?.Invoke(this, new TilesMovedEventArgs(result));
+            }
+            else
+            {
+                RemoveHistoryRecord();
             }
             return result;
             void Concentrate()
@@ -530,6 +549,13 @@ namespace Lib2048
                 }
             }
         }
+        /// <summary>
+        /// Promote a specified tile by one level.
+        /// </summary>
+        /// <param name="row">The row of the tile to promote.</param>
+        /// <param name="column">The column of the tile to promote.</param>
+        /// <returns><see langword="true"/> if the specified tile is removed, 
+        /// <see langword="false"/> if no tile exists at the specified location or the tile is too large to promote.</returns>
         protected bool PromoteTile(int row, int column)
         {
             int value = board[row, column];
@@ -537,11 +563,17 @@ namespace Lib2048
             {
                 AddHistoryRecord();
                 board[row, column] *= 2;
-                TilePromoted?.Invoke(this, new TilePromotedEventArgs(value, row, column));
+                TilePromoted?.Invoke(this, new TilePromotedEventArgs(row, column, value));
                 return true;
             }
             return false;
         }
+        /// <summary>
+        /// Remove a specified tile.
+        /// </summary>
+        /// <param name="row">The row of the tile to remove.</param>
+        /// <param name="column">The column of the tile to remove.</param>
+        /// <returns><see langword="true"/> if the tile is removed, <see langword="false"/> if no tile exists at the specified location.</returns>
         protected bool RemoveTile(int row, int column)
         {
             int value = board[row, column];
@@ -550,14 +582,14 @@ namespace Lib2048
             {
                 AddHistoryRecord();
                 board[row, column] = 0;
-                TileRemoved?.Invoke(this, new TileRemovedEventArgs(value, row, column));
+                TileRemoved?.Invoke(this, new TileRemovedEventArgs(row, column, value));
                 return true;
             }
         }
         /// <summary>
         /// Determine if the current board state is equal to the previous.
         /// </summary>
-        /// <returns>True if all the tiles are same, False if otherwise.</returns>
+        /// <returns><see langword="true"/> if all the tiles are same, <see langword="false"/> if otherwise.</returns>
         bool StatesEqual()
         {
             int[,] tempBrd = history[history.Count - 1].board;
@@ -578,9 +610,9 @@ namespace Lib2048
         {
             if (history.Count == 0) { return; }
             board = history[history.Count - 1].board;
-            GetFreeTiles();
+            UpdateFreeCells();
             Score = history[history.Count - 1].score;
-            history.RemoveAt(history.Count - 1);
+            RemoveHistoryRecord();
             TilesMoved?.Invoke(this, new TilesMovedEventArgs(new MoveResult()));
         }
         /// <summary>
@@ -606,7 +638,7 @@ namespace Lib2048
             Right = 3
         }
         /// <summary>
-        /// Provides date to the <see cref="GameFailed"/> event.
+        /// Provides information to the <see cref="GameFailed"/> event.
         /// </summary>
         public class GameFailedEventArgs : EventArgs
         {
@@ -661,7 +693,7 @@ namespace Lib2048
                 /// Determines if a specified move connects the current move at the end.
                 /// </summary>
                 /// <param name="inMove">A <see cref="Move"/> object specifying the input move.</param>
-                /// <returns>True if connected at the end, False otherwise.</returns>
+                /// <returns><see langword="true"/> if connected at the end, <see langword="false"/> otherwise.</returns>
                 internal bool IsConnecting(Move inMove)
                 {
                     if (inMove.Original.row == this.Destination.row && inMove.Original.column == this.Destination.column)
@@ -674,7 +706,7 @@ namespace Lib2048
                 /// Joins a specified move to the current one if they are connecting.
                 /// </summary>
                 /// <param name="inMove">A <see cref="Move"/> object specifying the input move.</param>
-                /// <returns>True if connected, False otherwise.</returns>
+                /// <returns><see langword="true"/> if connected, <see langword="false"/> otherwise.</returns>
                 internal bool JoinConnecting(Move inMove)
                 {
                     if(IsConnecting(inMove))
@@ -742,7 +774,7 @@ namespace Lib2048
             }
         }
         /// <summary>
-        /// Provides date to the <see cref="ScoreChanged"/> event.
+        /// Provides information to the <see cref="ScoreChanged"/> event.
         /// </summary>
         public class ScoreChangedEventArgs : EventArgs
         {
@@ -799,29 +831,82 @@ namespace Lib2048
             /// <param name="value">The value of the new tile.</param>
             public TileAddedEventArgs(int row, int column, int value) : this(row, column, value, false) { }
         }
+        /// <summary>
+        /// Provides information for <see cref="TilePromoted"/> event.
+        /// </summary>
         public class TilePromotedEventArgs : EventArgs
         {
+            /// <summary>
+            /// Initialize an instance of <see cref="TilePromotedEventArgs"/> with specified tile location, old value, and new value.
+            /// </summary>
+            /// <param name="location">The tuple containing the row and column of the promoted tile.</param>
+            /// <param name="oldValue">The value of the tile before promotion.</param>
+            /// <param name="newValue">The value of the tile after promotion.</param>
             public TilePromotedEventArgs((int row, int column) location, int oldValue, int newValue)
             {
                 Location = location;
                 OldValue = oldValue;
                 NewValue = newValue;
             }
-            public TilePromotedEventArgs(int oldValue, int newValue, int row, int column) : this((row, column), oldValue, newValue) { }
-            public TilePromotedEventArgs(int oldValue, int row, int column) : this(oldValue, oldValue * 2, row, column) { }
+            /// <summary>
+            /// Initialize an instance of <see cref="TilePromotedEventArgs"/> with specified tile location, old value, and new value.
+            /// </summary>
+            /// <param name="row">The row of the promoted tile.</param>
+            /// <param name="column">The column of the promoted tile.</param>
+            /// <param name="oldValue">The value of the tile before promotion.</param>
+            /// <param name="newValue">The value of the tile after promotion.</param>
+            public TilePromotedEventArgs(int row, int column, int oldValue, int newValue) : this((row, column), oldValue, newValue) { }
+
+            /// <summary>
+            /// Initialize an instance of <see cref="TilePromotedEventArgs"/> with specified tile location and old value, 
+            /// and defaults the new value to the old value times 2.
+            /// </summary>
+            /// <param name="row">The row of the promoted tile.</param>
+            /// <param name="column">The column of the promoted tile.</param>
+            /// <param name="oldValue">The value of the tile before promotion.</param>
+            public TilePromotedEventArgs(int row, int column, int oldValue) : this(row, column, oldValue, oldValue * 2) { }
+            /// <summary>
+            /// The location of the promoted tile.
+            /// </summary>
             public (int row, int column) Location { get; }
+            /// <summary>
+            /// The original value of the tile.
+            /// </summary>
             public int OldValue { get; private set; }
+            /// <summary>
+            /// The new value of the tile.
+            /// </summary>
             public int NewValue { get; private set; }
         }
+        /// <summary>
+        /// Provides information for <see cref="TileRemoved"/> event.
+        /// </summary>
         public class TileRemovedEventArgs : EventArgs
         {
-            public TileRemovedEventArgs(int value, (int row, int column) location)
+            /// <summary>
+            /// Initialize an instance of <see cref="TileRemovedEventArgs"/> with specified tile location and value.
+            /// </summary>
+            /// <param name="location">The tuple containing the row and column of the removed tile.</param>
+            /// <param name="value">The value of the removed tile.</param>
+            public TileRemovedEventArgs((int row, int column) location, int value)
             {
                 Location = location;
                 Value = value;
             }
-            public TileRemovedEventArgs(int value, int row, int column) : this(value, (row, column)) { }
+            /// <summary>
+            /// Initialize an instance of <see cref="TileRemovedEventArgs"/> with specified tile location and value.
+            /// </summary>
+            /// <param name="row">The row of the removed tile.</param>
+            /// <param name="column">The column of the removed tile.</param>
+            /// <param name="value">The value of the removed tile.</param>
+            public TileRemovedEventArgs(int row, int column, int value) : this((row, column), value) { }
+            /// <summary>
+            /// The location of the removed tile.
+            /// </summary>
             public (int row, int column) Location { get; }
+            /// <summary>
+            /// The value of the removed tile.
+            /// </summary>
             public int Value { get; }
         }
         /// <summary>
@@ -1315,30 +1400,92 @@ namespace Lib2048
         }
     }
 
+    /// <summary>
+    /// A 2048 board with items enabled.
+    /// </summary>
     [Serializable]
     public sealed class ItemBoard : Board
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ItemBoard"/> with specified size.
+        /// </summary>
+        /// <param name="size">The size of the board, represented by the number of cells in one dimension.</param>
         public ItemBoard(int size) : base(size) { }
+        /// <summary>
+        /// Initializes a <see cref="ItemBoard"/> with 4 * 4 size.
+        /// </summary>
         public ItemBoard() : this(4) { }
+
+        /// <summary>
+        /// Initializes a clone of specified <see cref="ItemBoard" /> object.
+        /// </summary>
+        /// <param name="board">The object to clone.</param>
         public ItemBoard(ItemBoard board) : base(board) { }
+
+        /// <summary>
+        /// Initializes a <see cref="ObstacledBoard"/> object from data provided in a <see cref="SerializationInfo"/> object.
+        /// </summary>
+        /// <param name="info">The <see cref="SerializationInfo"/> object to get data from.</param>
+        /// <param name="context">The destination (see <see cref="StreamingContext"/>) of this serialization.</param>
         ItemBoard(SerializationInfo info, StreamingContext context) : base(info, context) { }
+
+        /// <summary>
+        /// Occurs when a tile is promoted by calling <see cref="PromoteTile(int, int)"/> method.
+        /// </summary>
         public new event EventHandler<TilePromotedEventArgs> TilePromoted
         {
             add => base.TilePromoted += value;
             remove => base.TilePromoted -= value;
         }
+        /// <summary>
+        /// Occurs when a tile is removed by calling <see cref="RemoveTile(int, int)"/> method.
+        /// </summary>
         public new event EventHandler<TileRemovedEventArgs> TileRemoved
         {
             add => base.TileRemoved += value;
             remove => base.TileRemoved -= value;
         }
+
+        /// <summary>
+        /// Generate a tile with specified value in specified cell.
+        /// </summary>
+        /// <param name="value">The desired value.</param>
+        /// <param name="row">The row of the new tile.</param>
+        /// <param name="column">The column of the new tile.</param>
+        /// <returns>A tuple containing the row and column of the new tile, or (-1, -1) if the specified cell is occupied.</returns>
+        /// <remarks>
+        /// If a tile was successfully added, the method will fire <see cref="TileAdded"/> event.
+        /// </remarks>
         public new (int row, int column) AddTile(int value, int row, int column) { return base.AddTile(value, row, column); }
+
+        /// <summary>
+        /// Returns a clone of current object.
+        /// </summary>
+        /// <returns>A clone of current object.</returns>
         public override Board Copy()
         {
             return new ItemBoard(this);
         }
+        /// <summary>
+        /// Promote a specified tile by one level.
+        /// </summary>
+        /// <param name="row">The row of the tile to promote.</param>
+        /// <param name="column">The column of the tile to promote.</param>
+        /// <returns><see langword="true"/> if the specified tile is removed, 
+        /// <see langword="false"/> if no tile exists at the specified location or the tile is too large to promote.</returns>
         public new bool PromoteTile(int row, int column) { return base.PromoteTile(row, column); }
+        /// <summary>
+        /// Remove a specified tile.
+        /// </summary>
+        /// <param name="row">The row of the tile to remove.</param>
+        /// <param name="column">The column of the tile to remove.</param>
+        /// <returns><see langword="true"/> if the tile is removed, <see langword="false"/> if no tile exists at the specified location.</returns>
         public new bool RemoveTile(int row, int column) { return base.RemoveTile(row, column); }
+
+        /// <summary>
+        /// Undo the previous move.
+        /// </summary>
+        /// <remarks>Undo is not supported in this type of board. This method will do nothing.</remarks>
         public override void Undo()
         {
             // Not supported in this scenario.
