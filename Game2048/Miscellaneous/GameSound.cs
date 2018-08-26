@@ -55,6 +55,27 @@ namespace Game2048
         }
         public bool SfxOn { get; set; } = true;
 
+        //public string BgmPath
+        //{
+        //    get => bgmPlayer.Source.AbsoluteUri;
+        //    set
+        //    {
+        //        Uri uri = null;
+        //        try
+        //        {
+        //            uri = new Uri(value);
+        //        }
+        //        catch(FormatException) { return; }
+        //        bgmPlayer.Open(uri);
+        //        if(!bgmPlayer.HasAudio)
+        //        {
+        //            bgmPlayer.Open(new Uri("Breezala.mp3", UriKind.Relative));
+        //        }
+        //        BgmCustomized = true;
+        //    }
+        //}
+        //public bool BgmCustomized { get; private set; } = false;
+
         public void PlayBgm()
         {
             bgmOn = true;
@@ -80,6 +101,10 @@ namespace Game2048
 
         public void Config(SoundState state)
         {
+            //if (!string.IsNullOrEmpty(state.MusicPath))
+            //{
+            //    BgmPath = state.MusicPath;
+            //}
             BgmOn = state.BgmOn;
             SfxOn = state.SfxOn;
             BgmVolume = state.BgmVolume;
@@ -105,11 +130,20 @@ namespace Game2048
             SfxOn = sfxOn;
             SfxVolume = sfxVolume;
         }
+        //public SoundState(bool bgmOn, double bgmVolume, bool sfxOn, double sfxVolume, string musicPath)
+        //{
+        //    BgmOn = bgmOn;
+        //    BgmVolume = bgmVolume;
+        //    SfxOn = sfxOn;
+        //    SfxVolume = sfxVolume;
+        //    MusicPath = musicPath;
+        //}
 
         public bool BgmOn { get; set; } = true;
         public double BgmVolume { get; set; } = 0.5;
         public bool SfxOn { get; set; } = true;
         public double SfxVolume { get; set; } = 0.5;
+        //public string MusicPath { get; set; } = "";
 
         public static SoundState Default => new SoundState();
     }

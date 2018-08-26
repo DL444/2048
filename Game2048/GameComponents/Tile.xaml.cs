@@ -43,6 +43,9 @@ namespace Game2048
         {
             InitializeComponent();
             this.theme = brushSet;
+            NumberBox.FontFamily = theme.Font;
+            NumberBox.FontWeight = theme.Style.Weight;
+            NumberBox.FontStyle = theme.Style.Style;
             Number = number;
         }
 

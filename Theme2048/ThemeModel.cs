@@ -1,17 +1,15 @@
-﻿using System;
+﻿using MicroMvvm;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using MicroMvvm;
-using System.Text.RegularExpressions;
-using System.Windows.Controls;
 
 namespace Theme2048
 {
@@ -19,6 +17,8 @@ namespace Theme2048
     {
         bool _repeat = false;
         string _name = "";
+        private FontFamily _selectedFont = new FontFamily("Segoe UI");
+        private Typeface _selectedStyle;
 
         public ObservableCollection<TileThemeEntry> TileThemes { get; set; } = new ObservableCollection<TileThemeEntry>();
         public bool Repeat
@@ -39,13 +39,39 @@ namespace Theme2048
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
             }
         }
+        public List<FontFamily> Fonts { get; } 
+        public FontFamily SelectedFont
+        {
+            get => _selectedFont;
+            set
+            {
+                _selectedFont = value;
+                Styles.Clear();
+                foreach (var t in value.GetTypefaces())
+                {
+                    Styles.Add(t);
+                }
+                SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedFont"));
+            }
+        }
+        public ObservableCollection<Typeface> Styles { get; private set; } = new ObservableCollection<Typeface>();
+        public Typeface SelectedStyle
+        {
+            get => _selectedStyle;
+            set
+            {
+                _selectedStyle = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedStyle"));
+            }
+        }
 
         public ThemeModel()
             : this
-            (     "Default", 
+            ("Default",
                   new[]
                   {
-                      new TileThemeEntry(-1, Colors.DarkGray, Colors.Black), 
+                      new TileThemeEntry(-1, Colors.DarkGray, Colors.Black),
                       new TileThemeEntry(1, Colors.Indigo, Colors.White),
                       new TileThemeEntry(2, Colors.DarkBlue, Colors.White),
                       new TileThemeEntry(3, Colors.RoyalBlue, Colors.White),
@@ -58,18 +84,50 @@ namespace Theme2048
                       new TileThemeEntry(10, Colors.Tomato, Colors.White),
                       new TileThemeEntry(11, Colors.Red, Colors.White),
                       new TileThemeEntry(12, Colors.DarkRed, Colors.White),
-                  }, 
+                  },
                   false
             )
         { }
-        public ThemeModel(string name, IEnumerable<TileThemeEntry> entries, bool repeat)
+        public ThemeModel(string name, IEnumerable<TileThemeEntry> entries, bool repeat) : this(name, entries, repeat, "Segoe UI", 400, "Normal") { }
+        public ThemeModel(string name, IEnumerable<TileThemeEntry> entries, bool repeat, string font, int weight, string style)
         {
-            foreach(var e in entries)
+            Fonts = System.Windows.Media.Fonts.SystemFontFamilies.ToList();
+            Fonts.Sort(new FontComparer());
+            foreach (var e in entries)
             {
                 TileThemes.Add(e);
             }
             Repeat = repeat;
             Name = name;
+
+            SetFonts(font, weight, style);
+        }
+
+        public void SetFonts(string font, int weight, string style)
+        {
+            try
+            {
+                SelectedFont = (from f in System.Windows.Media.Fonts.SystemFontFamilies where f.Source == font select f).First();
+            }
+            catch (InvalidOperationException)
+            {
+                FontFamily defaultFamily = new FontFamily("Segoe UI");
+                SelectedFont = defaultFamily;
+                SelectedStyle = (from t in defaultFamily.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                return;
+            }
+
+            try
+            {
+                SelectedStyle = (from t in SelectedFont.GetTypefaces()
+                                 where (t.Weight.ToOpenTypeWeight() == weight) &&
+                                 (string.Equals(t.Style.ToString(), style, StringComparison.OrdinalIgnoreCase))
+                                 select t).First();
+            }
+            catch (InvalidOperationException)
+            {
+                SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -304,6 +362,46 @@ namespace Theme2048
         }
     }
 
+    public class FontStyleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Typeface typeface = null;
+            try
+            {
+                typeface = (Typeface)value;
+            }
+            catch (InvalidCastException) { return ""; }
+
+            string weightStr = typeface.Weight.ToString();
+            string styleStr = typeface.Style.ToString();
+            if (string.Equals(weightStr, "normal", StringComparison.OrdinalIgnoreCase) && 
+                string.Equals(styleStr, "normal", StringComparison.OrdinalIgnoreCase))
+            {
+                return "Normal";
+            }
+            else
+            {
+                string result = "";
+                if(!string.Equals(weightStr, "normal", StringComparison.OrdinalIgnoreCase))
+                {
+                    result += weightStr;
+                }
+                if(!string.Equals(styleStr, "normal", StringComparison.OrdinalIgnoreCase))
+                {
+                    if(result != "") { result += " "; }
+                    result += styleStr;
+                }
+                return result;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+    }
+
     public class ColorValidator : System.Windows.Controls.ValidationRule
     {
         public ColorValidator() { }
@@ -333,6 +431,14 @@ namespace Theme2048
                 return false;
             }
             return true;
+        }
+    }
+
+    public class FontComparer : IComparer<FontFamily>
+    {
+        public int Compare(FontFamily x, FontFamily y)
+        {
+            return string.Compare(x.Source, y.Source);
         }
     }
 }

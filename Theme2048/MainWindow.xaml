@@ -4,14 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Theme2048"
+        xmlns:media="clr-namespace:System.Windows.Media"
         mc:Ignorable="d"
-        Title="Theme Designer" Height="600" Width="800" MinWidth="440" WindowStartupLocation="CenterScreen" Icon="2048IconSmall-01.png">
+        Title="Theme Designer" Height="600" Width="800" MinWidth="550" WindowStartupLocation="CenterScreen" Icon="2048IconSmall-01.png">
     <Window.DataContext>
         <local:ThemeModel/>
     </Window.DataContext>
     <Window.Resources>
         <local:ColorBrushConverter x:Key="ColorBrushConverter"/>
         <local:LevelStringConverter x:Key="LevelStringConverter"/>
+        <local:FontStyleConverter x:Key="FontStyleConverter"/>
         <local:ColorValidator x:Key="ColorValidator"/>
         <Style TargetType="Button">
             <Setter Property="Background" Value="White"/>
@@ -27,9 +29,32 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Name}" FontWeight="Light" FontSize="28" Grid.Column="0" Margin="8,0,0,0"/>
-            <CheckBox IsChecked="{Binding Repeat}" Content="Repeat Over-bound" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0"/>
+            <TextBlock Text="{Binding Name}" FontWeight="Light" FontSize="28" Grid.Column="0" Margin="8,0,0,0" TextTrimming="CharacterEllipsis"/>
+            <StackPanel Orientation="Horizontal" Grid.Column="1">
+                <TextBlock Text="Font: " VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Fonts}" SelectedItem="{Binding SelectedFont, Mode=TwoWay}" Width="120" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="media:FontFamily">
+                            <TextBlock Text="{Binding}" FontFamily="{Binding}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <TextBlock Text="Style: " VerticalAlignment="Center"/>
+                <ComboBox ItemsSource="{Binding Styles}" SelectedItem="{Binding SelectedStyle, Mode=TwoWay}" Width="120" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="media:Typeface">
+                            <TextBlock Text="{Binding Converter={StaticResource FontStyleConverter}}" FontWeight="{Binding Weight}" FontStyle="{Binding Style}"
+                                       FontFamily="{Binding Path=DataContext.SelectedFont, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBox}}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <CheckBox IsChecked="{Binding Repeat}" Content="Repeat Over-bound" Grid.Column="3" VerticalAlignment="Center" Margin="0,0,16,0"/>
         </Grid>
         <ListView Grid.Row="1" x:Name="TileThemeList" ItemsSource="{Binding TileThemes}" BorderBrush="Transparent">
             <ListView.ItemContainerStyle>
@@ -42,7 +67,12 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Grid Width="64" Height="64" Background="{Binding BackgroundColor, Converter={StaticResource ColorBrushConverter}}">
                             <Viewbox>
-                                <Label FontFamily="Segoe UI" FontWeight="Light" Content="{Binding Level, Converter={StaticResource LevelStringConverter}}" Foreground="{Binding ForegroundColor, Converter={StaticResource ColorBrushConverter}}"/>
+                                <Label 
+                                    FontFamily="{Binding Path=DataContext.SelectedFont, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" 
+                                    FontWeight="{Binding Path=DataContext.SelectedStyle.Weight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" 
+                                    FontStyle="{Binding Path=DataContext.SelectedStyle.Style, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListView}}}" 
+                                    Content="{Binding Level, Converter={StaticResource LevelStringConverter}}" 
+                                    Foreground="{Binding ForegroundColor, Converter={StaticResource ColorBrushConverter}}"/>
                             </Viewbox>
                         </Grid>
                         <TextBlock Text="Background: " VerticalAlignment="Center" Margin="16,0,0,0"/>

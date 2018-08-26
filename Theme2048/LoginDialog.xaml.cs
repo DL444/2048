@@ -99,7 +99,7 @@ namespace Theme2048
                 Requesting = false;
             }
             this.DialogResult = true;
-            Username = UserBox.Text;
+            Username = UserBox.Text.Trim();
             this.Close();
         }
 

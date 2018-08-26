@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media;
 using ThemeSerializer2048;
 
@@ -8,6 +9,7 @@ namespace Game2048
     public interface ITileTheme
     {
         FontFamily Font { get; }
+        Typeface Style { get; }
         Brush GetForegroundBrush(int level);
         Brush GetBackgroundBrush(int level);
     }
@@ -30,8 +32,11 @@ namespace Game2048
             Brushes.Red, // 2048
             Brushes.DarkRed // 4096
         };
-        static FontFamily font;
+        static FontFamily font = new FontFamily("Segoe UI");
         public FontFamily Font => font;
+
+        static Typeface style;
+        public Typeface Style => style;
 
         static DefaultTheme()
         {
@@ -40,9 +45,16 @@ namespace Game2048
                 if(f.Source == "Segoe UI")
                 {
                     font = f;
+                    break;
+                }
+            }
+            foreach(var s in font.GetTypefaces())
+            {
+                if (s.Weight.ToOpenTypeWeight() == 400 && string.Equals(s.Style.ToString(), "normal", StringComparison.OrdinalIgnoreCase))
+                {
+                    style = s;
                     return;
                 }
-                font = new FontFamily("Segoe UI");
             }
         }
 
@@ -69,7 +81,8 @@ namespace Game2048
 
     class UserTheme : ITileTheme
     {
-        public FontFamily _font;
+        public FontFamily _font = new FontFamily("Segoe UI");
+        public Typeface _style;
 
         public UserTheme(string xmlString)
         {
@@ -82,14 +95,33 @@ namespace Game2048
             {
                 throw new ArgumentException(nameof(xmlString));
             }
+
             foreach (FontFamily f in Fonts.SystemFontFamilies)
             {
-                if (f.Source == "Segoe UI")
+                if (f.Source == Theme.FontFamily)
                 {
                     _font = f;
+                    break;
+                }
+            }
+            foreach(Typeface t in _font.GetTypefaces())
+            {
+                if(t.Weight.ToOpenTypeWeight() != Theme.Weight) { continue; }
+                if(string.Equals(t.Style.ToString(), Theme.Style, StringComparison.OrdinalIgnoreCase))
+                {
+                    _style = t;
                     return;
                 }
-                _font = new FontFamily("Segoe UI");
+            }
+
+            foreach (Typeface t in _font.GetTypefaces())
+            {
+                if (t.Weight.ToOpenTypeWeight() != 400) { continue; }
+                if (string.Equals(t.Style.ToString(), "Normal", StringComparison.OrdinalIgnoreCase))
+                {
+                    _style = t;
+                    return;
+                }
             }
         }
 
@@ -97,6 +129,8 @@ namespace Game2048
 
         public string XmlString { get; private set; }
         public Theme Theme { get; private set; }
+
+        public Typeface Style => _style;
 
         public Brush GetBackgroundBrush(int level)
         {

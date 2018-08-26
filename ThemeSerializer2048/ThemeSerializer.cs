@@ -11,6 +11,9 @@ namespace ThemeSerializer2048
         public string Name { get; set; }
         public List<ThemeEntry> Entries { get; set; } = new List<ThemeEntry>();
         public bool Repeat { get; set; }
+        public string FontFamily { get; set; }
+        public int Weight { get; set; }
+        public string Style { get; set; }
 
         public string GetXmlString()
         {
@@ -23,7 +26,10 @@ namespace ThemeSerializer2048
             {
                 writer.WriteStartElement("Theme");
                 writer.WriteAttributeString("Name", Name);
-                writer.WriteAttributeString("Repeat", Repeat == true ? "true" : "false");
+                writer.WriteAttributeString("Repeat", Repeat ? "true" : "false");
+                writer.WriteAttributeString("FontFamily", FontFamily);
+                writer.WriteAttributeString("Weight", Weight.ToString());
+                writer.WriteAttributeString("Style", Style);
                 writer.WriteStartElement("Entries");
                 foreach (var e in Entries)
                 {
@@ -57,12 +63,18 @@ namespace ThemeSerializer2048
                 {
                     reader.Read();
                     reader.Read();
-                    if (reader.AttributeCount != 2)
+                    if (reader.AttributeCount < 2)
                     {
                         throw new XmlException();
                     }
                     Name = reader.GetAttribute("Name");
                     Repeat = reader.GetAttribute("Repeat") == "true" ? true : false;
+                    string familyStr = reader.GetAttribute("FontFamily");
+                    FontFamily = familyStr ?? "Segoe UI";
+                    string weightStr = reader.GetAttribute("Weight");
+                    Weight = weightStr == null ? 400 : int.Parse(weightStr);
+                    string styleStr = reader.GetAttribute("Style");
+                    Style = (styleStr == null ? "Normal" : styleStr);
                     reader.Read();
                     while(true)
                     {

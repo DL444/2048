@@ -13,7 +13,7 @@
 
     <Grid x:Name="BackGrid" Margin="4" Background="DarkGreen">
         <Viewbox>
-            <Label Name="NumberBox" Content="0" FontWeight="Light"/>
+            <Label Name="NumberBox" Content="0"/>
         </Viewbox>
     </Grid>
 </UserControl>

@@ -73,6 +73,7 @@ namespace Theme2048
                 Theme t = new Theme(selector.ThemeContent);
                 model.Name = t.Name;
                 model.Repeat = t.Repeat;
+                model.SetFonts(t.FontFamily, t.Weight, t.Style);
                 model.TileThemes.Clear();
                 foreach (var e in t.Entries)
                 {
@@ -88,8 +89,11 @@ namespace Theme2048
         {
             Theme theme = new Theme();
             theme.Name = model.Name;
+            theme.FontFamily = model.SelectedFont.Source;
             theme.Repeat = model.Repeat;
-            foreach(var entry in model.TileThemes)
+            theme.Weight = model.SelectedStyle.Weight.ToOpenTypeWeight();
+            theme.Style = model.SelectedStyle.Style.ToString();
+            foreach (var entry in model.TileThemes)
             {
                 try
                 {
