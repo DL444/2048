@@ -51,7 +51,14 @@ namespace Theme2048
                 {
                     Styles.Add(t);
                 }
-                SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                try
+                {
+                    SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                }
+                catch(InvalidOperationException)
+                {
+                    SelectedStyle = SelectedFont.GetTypefaces().First();
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SelectedFont"));
             }
         }
@@ -126,7 +133,14 @@ namespace Theme2048
             }
             catch (InvalidOperationException)
             {
-                SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                try
+                {
+                    SelectedStyle = (from t in SelectedFont.GetTypefaces() where t.Weight.ToOpenTypeWeight() == 400 && t.Style.ToString() == "Normal" select t).First();
+                }
+                catch(InvalidOperationException)
+                {
+                    SelectedStyle = SelectedFont.GetTypefaces().First();
+                }
             }
         }
 

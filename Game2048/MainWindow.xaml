@@ -7,80 +7,12 @@
         mc:Ignorable="d"
         Title="2048" Height="450" Width="650" MinWidth="600" MinHeight="400" Icon="2048Icon-01.png" Closing="Window_Closing" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Button">
-                <Setter Property="Background" Value="White"/>
-            </Style>
-        </ResourceDictionary>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+        </Style>
     </Window.Resources>
 
-    <!--<Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="200"/>
-        </Grid.ColumnDefinitions>
-
-        
-        <Grid.Triggers>
-            <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                <EventTrigger.Actions>
-                    <BeginStoryboard>
-                        <BeginStoryboard.Storyboard>
-                            <Storyboard TargetName="Rect" TargetProperty="(Button.RenderTransform).(TranslateTransform.X)">
-                                <DoubleAnimation By="300" Duration="0:0:5" />
-                            </Storyboard>
-
-                        </BeginStoryboard.Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger.Actions>
-            </EventTrigger>
-        </Grid.Triggers>
-
-        <Rectangle x:Name="Rect" Fill="#FF0505C0" HorizontalAlignment="Center" Height="100" VerticalAlignment="Center" Width="100" Grid.Column="0">
-            <Rectangle.RenderTransform>
-                <TranslateTransform />
-            </Rectangle.RenderTransform>        
-        </Rectangle>
-
-    </Grid>-->
     <Grid x:Name="ParentGrid" KeyDown="MainGrid_KeyDown" KeyUp="MainGrid_KeyUp" Focusable="True">
-        <!--<Viewbox>
-            <Grid Height="1000" Width="1000">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.Triggers>
-                    <EventTrigger SourceName="Rect" RoutedEvent="MouseUp">
-                        <EventTrigger.Actions>
-                            <BeginStoryboard>
-                                <BeginStoryboard.Storyboard>
-                                    <Storyboard TargetName="Rect" TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)">
-                                        <DoubleAnimation By="250" Duration="0:0:0.15" AccelerationRatio="1.0" AutoReverse="True"/>
-                                    </Storyboard>
-                                </BeginStoryboard.Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger.Actions>
-                    </EventTrigger>
-                </Grid.Triggers>
-
-                <Rectangle x:Name="Rect" Fill="#FF0505C0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
-                    <Rectangle.RenderTransform>
-                        <TranslateTransform />
-                    </Rectangle.RenderTransform>
-                </Rectangle>
-
-
-            </Grid>
-        </Viewbox>-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="200"/>
@@ -111,6 +43,7 @@
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame6" Tag="6" Content="6 * 6" Margin="10" Click="NewGameBtns_Click"/>
+            <Button x:Name="TestBtn" Tag="6" Content="Test" Margin="10" Click="TestBtn_Click"/>
             <Label Content="Mode" HorizontalAlignment="Center" FontWeight="Bold"/>
             <ComboBox x:Name="ModeBox" SelectedIndex="0">
                 <ComboBoxItem>Normal</ComboBoxItem>

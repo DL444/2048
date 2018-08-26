@@ -353,9 +353,20 @@ namespace Game2048
                     mode = 5;
                     break;
             }
+
             if (firstDeath)
             {
                 firstDeath = false;
+                await Dispatcher.Invoke(async () =>
+                {
+                    await Task.Delay(1000);
+                    GameoverWindow window = new GameoverWindow();
+                    window.Score = brd.Score;
+                    var bytes = Miscellaneous.ScreenshotHelper.GetJpgImage(((gameBoard.Content as Grid).Children[0] as Viewbox).Child as Grid);
+                    window.ImageBytes = Miscellaneous.ScreenshotHelper.GetShareImage(bytes, brd.Score);
+                    window.ShowDialog();
+                });
+
                 try
                 {
                     await LoginClient2048.LoginClient.AddHighscore(username, sid, mode, brd.Size, brd.Score);
@@ -699,6 +710,15 @@ namespace Game2048
         {
             HighscoreWindow win = new HighscoreWindow();
             win.ShowDialog();
+        }
+
+        private void TestBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var bytes = Miscellaneous.ScreenshotHelper.GetJpgImage(((gameBoard.Content as Grid).Children[0] as Viewbox).Child as Grid);
+            Miscellaneous.ScreenshotHelper.GetShareImage(bytes, 1000);
+            //FileStream f = File.Create("C:\\Test\\Shot.jpg");
+            //f.Write(bytes, 0, bytes.Length - 1);
+            //f.Close();
         }
     }
 
