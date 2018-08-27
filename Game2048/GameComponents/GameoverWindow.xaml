@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Game2048"
         mc:Ignorable="d"
-        Title="Game Over" Height="350" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Game Over" Height="350" Width="450" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/Game2048;component/2048IconSmall-01.png">
     <Window.Resources>
         <ResourceDictionary>
             <Style TargetType="Button">

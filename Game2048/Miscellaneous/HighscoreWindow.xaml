@@ -26,7 +26,8 @@
                 <ComboBoxItem Content="Tools" Tag="5"/>
             </ComboBox>
             <TextBlock VerticalAlignment="Center" Text="Size" Margin="8"/>
-            <ComboBox x:Name="SizeCombo" SelectedIndex="0" MinWidth="100" Margin="8" SelectionChanged="SizeCombo_SelectionChanged">
+            <ComboBox x:Name="SizeCombo" SelectedIndex="1" MinWidth="100" Margin="8" SelectionChanged="SizeCombo_SelectionChanged">
+                <ComboBoxItem Content="3 * 3" Tag="3"/>
                 <ComboBoxItem Content="4 * 4" Tag="4"/>
                 <ComboBoxItem Content="5 * 5" Tag="5"/>
                 <ComboBoxItem Content="6 * 6" Tag="6"/>
