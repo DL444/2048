@@ -43,7 +43,7 @@
             <Button x:Name="NewGame4" Tag="4" Content="4 * 4" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame5" Tag="5" Content="5 * 5" Margin="10" Click="NewGameBtns_Click"/>
             <Button x:Name="NewGame6" Tag="6" Content="6 * 6" Margin="10" Click="NewGameBtns_Click"/>
-            <Button x:Name="TestBtn" Tag="6" Content="Test" Margin="10" Click="TestBtn_Click"/>
+            <!--<Button x:Name="TestBtn" Tag="6" Content="Test" Margin="10" Click="TestBtn_Click"/>-->
             <Label Content="Mode" HorizontalAlignment="Center" FontWeight="Bold"/>
             <ComboBox x:Name="ModeBox" SelectedIndex="0">
                 <ComboBoxItem>Normal</ComboBoxItem>

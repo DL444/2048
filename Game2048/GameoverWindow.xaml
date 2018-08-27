@@ -21,7 +21,7 @@
             <StackPanel Margin="50" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Game Over" FontSize="24" Margin="0,0,0,8"/>
                 <TextBlock Text="Score"/>
-                <TextBlock x:Name="ScoreBox" Text="" FontSize="20" Margin="0,4,0,8"/>
+                <TextBlock x:Name="ScoreBox" Text="0" FontSize="20" Margin="0,4,0,8"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
                     <Button x:Name="ShareBtn" MinWidth="100" Content="Share" Margin="0,0,8,0" Click="ShareBtn_Click"/>
                     <Button x:Name="CloseBtn" Width="70" Content="Close" Click="CloseBtn_Click" />

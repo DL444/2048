@@ -57,7 +57,7 @@ namespace Game2048.Help
 
     public static class HelpPageFactory
     {
-        static Type[] pageTypes = new Type[] { typeof(HelpPage0), typeof(HelpPage1), typeof(HelpPage2), typeof(HelpPage3), typeof(HelpPage4) };
+        static Type[] pageTypes = new Type[] { typeof(HelpPage0), typeof(HelpPage1), typeof(HelpPage2), typeof(HelpPage25), typeof(HelpPage3), typeof(HelpPage4) };
         public static int PageCount => pageTypes.Length;
         public static Page GetInstance(int index)
         {

@@ -40,7 +40,11 @@
                                             </DoubleAnimation.EasingFunction>
                                         </DoubleAnimation>
                                         <DoubleAnimation Storyboard.TargetName="StarGrid" Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0" BeginTime="0:0:1.5"/>
-                                        <DoubleAnimation Storyboard.TargetName="StarRotateTransform" Storyboard.TargetProperty="Angle" From="1" To="360" Duration="0:0:0.3" BeginTime="0:0:2"/>
+                                        <DoubleAnimation Storyboard.TargetName="StarRotateTransform" Storyboard.TargetProperty="Angle" From="1" To="360" Duration="0:0:0.3" BeginTime="0:0:2">
+                                            <DoubleAnimation.EasingFunction>
+                                                <CircleEase EasingMode="EaseOut"/>
+                                            </DoubleAnimation.EasingFunction>
+                                        </DoubleAnimation>
                                         <DoubleAnimation Storyboard.TargetName="StarGrid" Storyboard.TargetProperty="Height" From="5" To="20" Duration="0:0:0.3" BeginTime="0:0:2"/>
                                         <DoubleAnimation Storyboard.TargetName="StarGrid" Storyboard.TargetProperty="Width" From="5" To="20" Duration="0:0:0.3" BeginTime="0:0:2"/>
                                         <DoubleAnimation Storyboard.TargetName="StarTranslateTransform" Storyboard.TargetProperty="Y" From="0" To="-35" Duration="0:0:0.3" BeginTime="0:0:2">
@@ -83,7 +87,7 @@
                 </ContentControl>
             </Viewbox>
 
-            <TextBlock Text="Challenge yourself to get 2048 and compete with others!" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" Grid.Row="1" FontSize="24"/>
+            <TextBlock Text="Challenge yourself to get 2048!" TextWrapping="WrapWithOverflow" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8" Grid.Row="1" FontSize="24"/>
 
         </Grid>
     </Grid>

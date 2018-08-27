@@ -217,7 +217,7 @@ namespace Game2048
         {
             try
             {
-                Dispatcher.Invoke(() => { DemoRun(); });
+                Dispatcher.Invoke(() => DemoRun());
             }
             catch (TaskCanceledException) { }
         }

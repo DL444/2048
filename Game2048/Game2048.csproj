@@ -63,6 +63,9 @@
     <Compile Include="GameoverWindow.xaml.cs">
       <DependentUpon>GameoverWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Help\HelpPage25.xaml.cs">
+      <DependentUpon>HelpPage25.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Help\HelpPage4.xaml.cs">
       <DependentUpon>HelpPage4.xaml</DependentUpon>
     </Compile>
@@ -116,6 +119,10 @@
     <Page Include="GameoverWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Help\HelpPage25.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Help\HelpPage4.xaml">
       <Generator>MSBuild:Compile</Generator>
