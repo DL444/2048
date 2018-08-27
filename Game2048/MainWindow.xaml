@@ -18,7 +18,7 @@
     </Window.Resources>
 
     <Grid x:Name="ParentGrid" KeyDown="MainGrid_KeyDown" KeyUp="MainGrid_KeyUp" Focusable="True">
-        <Grid.Triggers>
+        <!--<Grid.Triggers>
             <EventTrigger RoutedEvent="Loaded">
                 <BeginStoryboard>
                     <Storyboard RepeatBehavior="Forever" Timeline.DesiredFrameRate="5">
@@ -28,7 +28,7 @@
                     </Storyboard>
                 </BeginStoryboard>
             </EventTrigger>
-        </Grid.Triggers>
+        </Grid.Triggers>-->
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="200"/>
@@ -109,10 +109,10 @@
         </StackPanel>
         
         <!--TODO: Animate this background!-->
-        <Grid x:Name="BackgroundGrid" Grid.ColumnSpan="2" Panel.ZIndex="-1">
+        <!--<Grid x:Name="BackgroundGrid" Grid.ColumnSpan="2" Panel.ZIndex="-1">
             <Grid.Background>
                 <SolidColorBrush x:Name="BackColor" Color="Transparent"/>
             </Grid.Background>
-        </Grid>
+        </Grid>-->
     </Grid>
 </Window>

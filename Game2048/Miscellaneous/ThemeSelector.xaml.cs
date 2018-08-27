@@ -10,11 +10,21 @@ namespace Game2048
     public partial class ThemeSelector : Window
     {
         ThemeSelectorModel model;
+        bool _requesting = false;
 
         public string Sid { get; set; } = "";
         public string Username { get; set; } = "";
         public ThemeSelectorEntryModel Selected { get; set; }
         public string ThemeContent { get; set; }
+        public bool Requesting
+        {
+            get => _requesting;
+            set
+            {
+                _requesting = value;
+                OkBtn.IsEnabled = !value;
+            }
+        }
 
         public ThemeSelector()
         {
@@ -23,23 +33,30 @@ namespace Game2048
 
         private async void OkBtn_Click(object sender, RoutedEventArgs e)
         {
-            Selected = model.SelectedEntry;
-            try
+            if(!Requesting)
             {
-                ThemeContent = await GetThemeContent(Selected.Id);
+                Requesting = true;
+                Selected = model.SelectedEntry;
+                try
+                {
+                    ThemeContent = await GetThemeContent(Selected.Id);
+                }
+                catch (ThemeNotFoundException)
+                {
+                    MessageBoxResult result = MessageBox.Show("Theme not found. Please contact technical support.", "Theme not found");
+                    Requesting = false;
+                    return;
+                }
+                catch (Exception)
+                {
+                    MessageBoxResult result = MessageBox.Show("Fetch theme list failed. Please check your Internet connection.", "Connection failed");
+                    Requesting = false;
+                    return;
+                }
+                Requesting = false;
+                DialogResult = true;
+                this.Close();
             }
-            catch (ThemeNotFoundException)
-            {
-                MessageBoxResult result = MessageBox.Show("Theme not found. Please contact technical support.", "Theme not found");
-                return;
-            }
-            catch (Exception)
-            {
-                MessageBoxResult result = MessageBox.Show("Fetch theme list failed. Please check your Internet connection.", "Connection failed");
-                return;
-            }
-            DialogResult = true;
-            this.Close();
         }
 
         private async void Window_Initialized(object sender, EventArgs e)
