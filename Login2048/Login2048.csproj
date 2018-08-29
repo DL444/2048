@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <UserSecretsId>9c69fbac-51be-4f47-b465-74abc4821e49</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20180813111133_Initial.cs" />
+    <Compile Remove="Migrations\20180813111133_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20180823003022_Highscor.cs" />
+    <Compile Remove="Migrations\20180823003022_Highscor.Designer.cs" />
+    <Compile Remove="Migrations\20180823003053_Highscore.cs" />
+    <Compile Remove="Migrations\20180823003053_Highscore.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Prepaid2048\Prepaid2048.csproj" />
+    <ProjectReference Include="..\ThemeSerializer2048\ThemeSerializer2048.csproj" />
+  </ItemGroup>
+
+</Project>
