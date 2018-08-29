@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Game2048
 {
@@ -54,7 +43,25 @@ namespace Game2048
         {
             InitializeComponent();
             this.theme = brushSet;
+            NumberBox.FontFamily = theme.Font;
+            NumberBox.FontWeight = theme.Style.Weight;
+            NumberBox.FontStyle = theme.Style.Style;
             Number = number;
+        }
+
+        public event EventHandler<TileTappedEventArgs> TileTapped;
+        public class TileTappedEventArgs : EventArgs
+        {
+            Tile TileTapped { get; }
+            public TileTappedEventArgs(Tile tileTapped)
+            {
+                TileTapped = tileTapped;
+            }
+        }
+
+        private void Tile_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            TileTapped?.Invoke(this, new TileTappedEventArgs(this));
         }
     }
 }

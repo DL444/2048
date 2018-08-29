@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Game2048.Properties
+namespace Theme2048.Properties
 {
 
 

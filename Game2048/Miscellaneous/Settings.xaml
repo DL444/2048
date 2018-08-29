@@ -1,0 +1,33 @@
+﻿<Window x:Class="Game2048.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game2048"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/Game2048;component/2048IconSmall-01.png">
+    <Window.DataContext>
+        <local:GameSoundPlayer/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Margin="16">
+            <TextBlock Text="Settings" FontSize="28" FontWeight="Light" Margin="0,0,0,16"/>
+            <CheckBox Content="Background Music" IsChecked="{Binding BgmOn, Mode=TwoWay}" Margin="0,0,0,8"/>
+            <TextBlock Text="Background Music Volume" Margin="0,0,0,4"/>
+            <Slider Value="{Binding BgmVolume, Mode=TwoWay}" Minimum="0" Maximum="1" Margin="0,0,0,16" LargeChange="0.1"/>
+            <CheckBox Content="Sound Effect" IsChecked="{Binding SfxOn, Mode=TwoWay}" Margin="0,0,0,8"/>
+            <TextBlock Text="Sound Effect Volume" Margin="0,0,0,4"/>
+            <Slider Value="{Binding SfxVolume, Mode=TwoWay}" Minimum="0" Maximum="1" Margin="0,0,0,16" LargeChange="0.1"/>
+        </StackPanel>
+        <Grid Background="LightGray" Grid.Row="1">
+            <!--<Button x:Name="ChangePwdBtn" Content="Change Password" MinWidth="120" HorizontalAlignment="Left" Margin="8"  Click=""/>-->
+            <Button x:Name="HelpBtn" Content="Tutorial" MinWidth="80" HorizontalAlignment="Left" Margin="8"  Click="HelpBtn_Click"/>
+            <Button x:Name="OkBtn" Content="OK" MinWidth="80" HorizontalAlignment="Right" Margin="8" Click="OkBtn_Click"/>
+        </Grid>
+
+    </Grid>
+</Window>

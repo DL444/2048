@@ -1,0 +1,26 @@
+636697555460167754
+63 66975563 34179930
+864000000000
+315360000000000
+
+Whole Card Display Key: 
+
+TTTT TTTT TTTT TTTT DDDD DDDD
+
+// Get Key from DateTime.Tick:
+1 A1 = A & B
+2 B1 = A | B
+3 C1 = A > B ? 1 : 0
+4 D1 = A ^ B
+// Get VI from Key
+1 If the last bit of the key is 0, Get all even bits, !=
+2 If the last bit of the key is 1, Get all  odd bits, ==
+// Get Display String from DateTime.Tick
+1 If odd number in odd place, even number in even place: Alphabetize
+    Rules : 'A' + Index + Number.
+2 Interlace A and B
+// Get Data Payload
+1 Remove all =
+2 Replace + with P
+3 ToUpper
+4 Get First 4 and Last 4

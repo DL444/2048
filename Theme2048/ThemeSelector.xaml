@@ -1,0 +1,55 @@
+﻿<Window x:Class="Theme2048.ThemeSelector"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Theme2048"
+        mc:Ignorable="d"
+        Title="Select Task" Height="600" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Icon="2048IconSmall-01.png" >
+    <Window.DataContext>
+        <local:ThemeSelectorModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+        </Style>
+        <local:InvertBoolConverter x:Key="InvertBoolConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Select Task" FontWeight="Light" FontSize="24" Margin="16,8,8,8"/>
+        <StackPanel Margin="18,8,16,8" Grid.Row="1">
+            <RadioButton Content="New theme" IsChecked="{Binding CreateNew, Mode=TwoWay}" GroupName="New" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" Margin="20,8,0,0">
+                <TextBlock Text="Name: " VerticalAlignment="Center"/>
+                <TextBox Text="{Binding NewName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MinWidth="300" Margin="4,0,80,0" VerticalAlignment="Center" IsEnabled="{Binding CreateNew}"/>
+            </StackPanel>
+        </StackPanel>
+        <Grid Margin="18,8,16,8" Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <RadioButton Content="Edit existing theme" GroupName="New" HorizontalAlignment="Left"/>
+            <ListView Margin="20,8,0,8" ItemsSource="{Binding Entries}" Grid.Row="1" SelectedItem="{Binding SelectedEntry, Mode=TwoWay}" IsEnabled="{Binding CreateNew, Converter={StaticResource InvertBoolConverter}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate DataType="local:ThemeSelectorEntryModel">
+                        <StackPanel Margin="8">
+                            <TextBlock FontWeight="Bold" Text="{Binding Name}"/>
+                            <TextBlock Foreground="Gray" Text="{Binding Id}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+        <Grid Background="LightGray" Grid.Row="3">
+            <Button x:Name="OkBtn" Content="OK" MinWidth="80" HorizontalAlignment="Right" Margin="8" Click="OkBtn_Click" Command="{Binding Ok}"/>
+        </Grid>
+    </Grid>
+</Window>

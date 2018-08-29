@@ -5,14 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Game2048"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             d:DesignHeight="200" d:DesignWidth="200"
+             MouseUp="Tile_MouseUp">
     <UserControl.RenderTransform>
         <TranslateTransform />
     </UserControl.RenderTransform>
 
-    <Grid x:Name="BackGrid" Margin="5" Background="DarkGreen">
+    <Grid x:Name="BackGrid" Margin="4" Background="DarkGreen">
         <Viewbox>
-            <Label Name="NumberBox" Content="0" FontWeight="Light"/>
+            <Label Name="NumberBox" Content="0"/>
         </Viewbox>
     </Grid>
 </UserControl>

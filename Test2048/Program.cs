@@ -1,10 +1,6 @@
 ﻿//#define MDEBUG
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lib2048;
+using System;
 
 namespace Test2048
 {

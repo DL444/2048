@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -59,11 +60,99 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Tile.xaml.cs">
+    <Compile Include="GameComponents\GameoverWindow.xaml.cs">
+      <DependentUpon>GameoverWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage25.xaml.cs">
+      <DependentUpon>HelpPage25.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage4.xaml.cs">
+      <DependentUpon>HelpPage4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage1.xaml.cs">
+      <DependentUpon>HelpPage1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage0.xaml.cs">
+      <DependentUpon>HelpPage0.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage3.xaml.cs">
+      <DependentUpon>HelpPage3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpPage2.xaml.cs">
+      <DependentUpon>HelpPage2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Help\HelpWindow.xaml.cs">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Miscellaneous\GameSound.cs" />
+    <Compile Include="Miscellaneous\HighscoreViewModel.cs" />
+    <Compile Include="Miscellaneous\HighscoreWindow.xaml.cs">
+      <DependentUpon>HighscoreWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Miscellaneous\LoginDialog.xaml.cs">
+      <DependentUpon>LoginDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Miscellaneous\RedeemWindow.xaml.cs">
+      <DependentUpon>RedeemWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Miscellaneous\ScreenshotHelper.cs" />
+    <Compile Include="RelayCommand.cs" />
+    <Compile Include="Miscellaneous\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Miscellaneous\ThemeModel.cs" />
+    <Compile Include="Miscellaneous\ThemeSelector.xaml.cs">
+      <DependentUpon>ThemeSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameComponents\Tile.xaml.cs">
       <DependentUpon>Tile.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TileThemes.cs" />
-    <Page Include="GameBoard.xaml">
+    <Compile Include="GameComponents\TileThemes.cs" />
+    <Compile Include="GameComponents\ToolsWindow.xaml.cs">
+      <DependentUpon>ToolsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameComponents\ToolsWindowViewModel.cs" />
+    <Page Include="GameComponents\GameBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameComponents\GameoverWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Help\HelpPage25.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\HelpPage4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\HelpPage1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\HelpPage0.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Help\HelpPage3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Help\HelpPage2.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Help\HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Miscellaneous\HighscoreWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Miscellaneous\LoginDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -75,14 +164,34 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameBoard.xaml.cs">
+    <Compile Include="GameComponents\GameBoard.xaml.cs">
       <DependentUpon>GameBoard.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Tile.xaml">
+    <Page Include="Miscellaneous\RedeemWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Miscellaneous\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Miscellaneous\ThemeSelector.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameComponents\Tile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameComponents\ToolsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UIStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -105,7 +214,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -118,6 +229,14 @@
     <ProjectReference Include="..\Lib2048\Lib2048.csproj">
       <Project>{e7bfbd40-e4c0-4691-9887-5298d7f4a3ca}</Project>
       <Name>Lib2048</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\LoginClient2048\LoginClient2048.csproj">
+      <Project>{fb72f85e-9e0a-4d7d-a94e-9a6186da852b}</Project>
+      <Name>LoginClient2048</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ThemeSerializer2048\ThemeSerializer2048.csproj">
+      <Project>{26b34f5f-145c-45bc-aeef-b4909f5a798e}</Project>
+      <Name>ThemeSerializer2048</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
