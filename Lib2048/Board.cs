@@ -1071,6 +1071,41 @@ namespace Lib2048
                 TotalTime = totalTime;
             }
         }
+
+        /// <summary>
+        /// Provide additional information to <see cref="Board.GameFailedEventArgs"/>.
+        /// </summary>
+        public class TimedGameFailedEventArgs : GameFailedEventArgs
+        {
+            /// <summary>
+            /// Specifying the reason of failure.
+            /// </summary>
+            public enum FailedReason
+            {
+                /// <summary>
+                /// Specifying that the game is failed because the time is up.
+                /// </summary>
+                TimesUp,
+                /// <summary>
+                /// Specifying that the game is failed because the board is full and no further movement can be made.
+                /// </summary>
+                Normal
+            }
+            /// <summary>
+            /// The reason the game failed.
+            /// </summary>
+            public FailedReason Reason { get; private set; }
+            /// <summary>
+            /// Initializes a <see cref="TimedGameFailedEventArgs"/> object with specified failure reason and score.
+            /// </summary>
+            /// <param name="reason">A <see cref="FailedReason"/> value specifying the reason the game failed.</param>
+            /// <param name="score">The score of the game.</param>
+            public TimedGameFailedEventArgs(FailedReason reason, int score) : base(score)
+            {
+                Reason = reason;
+            }
+        }
+
     }
 
     /// <summary>
@@ -1290,39 +1325,6 @@ namespace Lib2048
             info.AddValue("remainingTime", RemainingTime, typeof(long));
         }
 
-        /// <summary>
-        /// Provide additional information to <see cref="Board.GameFailedEventArgs"/>.
-        /// </summary>
-        public class TimedGameFailedEventArgs : GameFailedEventArgs
-        {
-            /// <summary>
-            /// Specifying the reason of failure.
-            /// </summary>
-            public enum FailedReason
-            {
-                /// <summary>
-                /// Specifying that the game is failed because the time is up.
-                /// </summary>
-                TimesUp,
-                /// <summary>
-                /// Specifying that the game is failed because the board is full and no further movement can be made.
-                /// </summary>
-                Normal
-            }
-            /// <summary>
-            /// The reason the game failed.
-            /// </summary>
-            public FailedReason Reason { get; private set; }
-            /// <summary>
-            /// Initializes a <see cref="TimedGameFailedEventArgs"/> object with specified failure reason and score.
-            /// </summary>
-            /// <param name="reason">A <see cref="FailedReason"/> value specifying the reason the game failed.</param>
-            /// <param name="score">The score of the game.</param>
-            public TimedGameFailedEventArgs(FailedReason reason, int score) : base(score)
-            {
-                Reason = reason;
-            }
-        }
     }
 
     /// <summary>
