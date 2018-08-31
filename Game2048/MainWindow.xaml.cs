@@ -357,16 +357,6 @@ namespace Game2048
             if (firstDeath)
             {
                 firstDeath = false;
-                await Dispatcher.Invoke(async () =>
-                {
-                    await Task.Delay(1000);
-                    GameoverWindow window = new GameoverWindow();
-                    window.Score = brd.Score;
-                    var bytes = Miscellaneous.ScreenshotHelper.GetJpgImage(((gameBoard.Content as Grid).Children[0] as Viewbox).Child as Grid);
-                    window.ImageBytes = Miscellaneous.ScreenshotHelper.GetShareImage(bytes, brd.Score);
-                    window.ShowDialog();
-                });
-
                 try
                 {
                     await LoginClient2048.LoginClient.AddHighscore(username, sid, mode, brd.Size, brd.Score);
@@ -380,6 +370,15 @@ namespace Game2048
                     MessageBox.Show("Score upload failed. Please check your Internet connection.", "Connection failed");
                 }
 
+                await Dispatcher.Invoke(async () =>
+                {
+                    await Task.Delay(1000);
+                    GameoverWindow window = new GameoverWindow();
+                    window.Score = brd.Score;
+                    var bytes = Miscellaneous.ScreenshotHelper.GetJpgImage(((gameBoard.Content as Grid).Children[0] as Viewbox).Child as Grid);
+                    window.ImageBytes = Miscellaneous.ScreenshotHelper.GetShareImage(bytes, brd.Score);
+                    window.ShowDialog();
+                });
             }
         }
 
